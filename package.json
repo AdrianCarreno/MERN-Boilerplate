@@ -1,0 +1,28 @@
+{
+    "name": "mern-boilerplate",
+    "description": "MERN Boilerplate designed to save time when created a new application based on MERN stack.",
+    "version": "0.1.0",
+    "author": {
+        "name": "Adrián Carreño",
+        "email": "adriancarreno.d@gmail.com",
+        "url": "https://github.com/AdrianCarreno"
+    },
+    "repository": {
+        "url": "https://github.com/AdrianCarreno/MERN-Boilerplate"
+    },
+    "license": "GPL-3.0-only",
+    "scripts": {
+        "dev-server": "npm run dev --prefix server",
+        "dev-client": "npm run start --prefix client",
+        "dev": "concurrently --kill-others-on-fail \"npm run dev-server\" \"npm run dev-client\"",
+        "install-server": "cd ./server && npm install",
+        "install-client": "cd ./client && npm install",
+        "postinstall": "npm run install-server && npm run install-client",
+        "update-server": "cd ./server && npm update && npm install",
+        "update-client": "cd ./client && npm update && npm install",
+        "update": "npm update && npm run update-server && npm run update-client"
+    },
+    "devDependencies": {
+        "concurrently": "^6.4.0"
+    }
+}
