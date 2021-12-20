@@ -1,20 +1,23 @@
-import logo from './logo.svg'
-import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Navbar } from './components'
+import { Auth, Miscelaneous } from './pages'
 
-function App() {
+export default function App() {
     return (
-        <div className="App">
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                    Edit <code>src/App.js</code> and save to reload.
-                </p>
-                <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-                    Learn React
-                </a>
-            </header>
-        </div>
+        <BrowserRouter>
+            <Navbar />
+            <main>
+                <Routes>
+                    <Route path="/" element={<Miscelaneous.HomePage />} />
+                    <Route path="/about" element={<Miscelaneous.AboutPage />} />
+                    <Route path="/contact" element={<Miscelaneous.ContactPage />} />
+                    <Route path="/login" element={<Auth.LoginPage />} />
+                    <Route path="/register" element={<Auth.RegisterPage />} />
+                    <Route path="/forgot-password" element={<Auth.ForgotPasswordPage />} />
+                    <Route path="*" element={<Miscelaneous.NotFoundPage />} />
+                </Routes>
+            </main>
+        </BrowserRouter>
     )
 }
-
-export default App
