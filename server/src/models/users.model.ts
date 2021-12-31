@@ -5,25 +5,25 @@ const userSchema: Schema = new Schema(
     {
         firstName: {
             type: String,
-            required: [true, 'Name is required'],
+            required: [true, 'Name is required']
         },
         lastName: {
             type: String,
-            required: false,
+            required: false
         },
         email: {
             type: String,
             required: true,
-            unique: true,
+            unique: true
         },
         password: {
             type: String,
-            required: true,
-        },
+            required: true
+        }
     },
     {
-        timestamps: true,
-    },
+        timestamps: true
+    }
 )
 
 userSchema.virtual('fullName').get(function () {

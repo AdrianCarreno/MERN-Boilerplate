@@ -77,10 +77,10 @@ class App {
                 info: {
                     title: 'REST API',
                     version: '1.0.0',
-                    description: 'Example docs',
-                },
+                    description: 'Example docs'
+                }
             },
-            apis: ['swagger.yaml'],
+            apis: ['swagger.yaml']
         }
 
         const specs = swaggerJSDoc(options)

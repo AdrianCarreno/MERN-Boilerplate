@@ -16,7 +16,7 @@ describe('Testing Auth', () => {
                 firstName: 'John',
                 lastName: 'Doe',
                 email: 'test@email.com',
-                password: 'q1w2e3r4!',
+                password: 'q1w2e3r4!'
             }
 
             const authRoute = new AuthRoute()
@@ -26,7 +26,7 @@ describe('Testing Auth', () => {
             users.create = jest.fn().mockReturnValue({
                 _id: '60706478aad6c9ad19a31c84',
                 email: userData.email,
-                password: await bcrypt.hash(userData.password, 10),
+                password: await bcrypt.hash(userData.password, 10)
             })
             ;(mongoose as any).connect = jest.fn()
             const app = new App([authRoute])
@@ -38,7 +38,7 @@ describe('Testing Auth', () => {
         it('response should have the Set-Cookie header with the Authorization token', async () => {
             const userData: LoginUserDto = {
                 email: 'test@email.com',
-                password: 'q1w2e3r4!',
+                password: 'q1w2e3r4!'
             }
 
             const authRoute = new AuthRoute()
@@ -47,7 +47,7 @@ describe('Testing Auth', () => {
             users.findOne = jest.fn().mockReturnValue({
                 _id: '60706478aad6c9ad19a31c84',
                 email: userData.email,
-                password: await bcrypt.hash(userData.password, 10),
+                password: await bcrypt.hash(userData.password, 10)
             })
             ;(mongoose as any).connect = jest.fn()
             const app = new App([authRoute])
