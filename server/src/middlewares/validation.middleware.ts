@@ -8,7 +8,7 @@ const validationMiddleware = (
     value: string | 'body' | 'query' | 'params' = 'body',
     skipMissingProperties = false,
     whitelist = true,
-    forbidNonWhitelisted = true,
+    forbidNonWhitelisted = true
 ): RequestHandler => {
     return (req, res, next) => {
         validate(plainToClass(type, req[value]), { skipMissingProperties, whitelist, forbidNonWhitelisted }).then(
@@ -19,7 +19,7 @@ const validationMiddleware = (
                 } else {
                     next()
                 }
-            },
+            }
         )
     }
 }

@@ -18,7 +18,7 @@ class UsersRoute implements Routes {
         this.router.put(
             `${this.path}/:id`,
             validationMiddleware(CreateUserDto, 'body', true),
-            this.usersController.updateUser,
+            this.usersController.updateUser
         )
         this.router.delete(`${this.path}/:id`, this.usersController.deleteUser)
     }

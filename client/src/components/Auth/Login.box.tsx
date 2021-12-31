@@ -1,22 +1,28 @@
 import axios from 'axios'
-import { useState } from 'react'
+import { useState, ChangeEvent, FormEvent } from 'react'
 import { Button, Form } from 'react-bootstrap'
 import './Auth.scss'
 
 export default function LoginBox() {
     const [inputs, setInputs] = useState({})
+    const [error, setError] = useState<boolean>(false)
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const name = event.target.name
-        const value = event.target.value
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target
         setInputs(values => ({ ...values, [name]: value }))
     }
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        axios.post('/login', inputs).then(res => {
-            console.log(res)
-        })
+        axios
+            .post('/login', inputs)
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                console.log(err)
+                setError(true)
+            })
     }
 
     return (
@@ -28,8 +34,10 @@ export default function LoginBox() {
                     type="email"
                     placeholder="Enter email"
                     autoComplete="username"
+                    isInvalid={error}
                     onChange={handleChange}
                 />
+                <Form.Control.Feedback type="invalid">Wrong credentials.</Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">

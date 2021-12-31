@@ -22,7 +22,7 @@ describe('Testing Users', () => {
                 firstName: 'John',
                 lastName: 'Doe',
                 email: 'a@email.com',
-                password: await bcrypt.hash('q1w2e3r4!', 10),
+                password: await bcrypt.hash('q1w2e3r4!', 10)
             })
             ;(mongoose as any).connect = jest.fn()
             const app = new App([usersRoute])
@@ -37,7 +37,7 @@ describe('Testing Users', () => {
                 firstName: 'John',
                 lastName: 'Doe',
                 email: 'test@email.com',
-                password: 'q1w2e3r4',
+                password: 'q1w2e3r4'
             }
 
             const usersRoute = new UsersRoute()
@@ -47,14 +47,14 @@ describe('Testing Users', () => {
                 users.findOne = jest.fn().mockReturnValue({
                     _id: userId,
                     email: userData.email,
-                    password: await bcrypt.hash(userData.password, 10),
+                    password: await bcrypt.hash(userData.password, 10)
                 })
             }
 
             users.findByIdAndUpdate = jest.fn().mockReturnValue({
                 _id: userId,
                 email: userData.email,
-                password: await bcrypt.hash(userData.password, 10),
+                password: await bcrypt.hash(userData.password, 10)
             })
             ;(mongoose as any).connect = jest.fn()
             const app = new App([usersRoute])
@@ -74,7 +74,7 @@ describe('Testing Users', () => {
                 firstName: 'John',
                 lastName: 'Doe',
                 email: 'test@email.com',
-                password: await bcrypt.hash('q1w2e3r4!', 10),
+                password: await bcrypt.hash('q1w2e3r4!', 10)
             })
             ;(mongoose as any).connect = jest.fn()
             const app = new App([usersRoute])
