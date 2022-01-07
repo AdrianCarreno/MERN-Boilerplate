@@ -1,9 +1,13 @@
 {
     "name": "server",
     "version": "0.0.0",
-    "description": "TypeScript + Mongoose + MongoDB + Express API Server",
+    "description": "TypeScript + Mongoose + MongoDB + Express API Server. Based on https://github.com/ljlm0402/typescript-express-starter.",
     "author": "",
     "license": "ISC",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/AdrianCarreno/MERN-Boilerplate"
+    },
     "scripts": {
         "start": "npm run build && cross-env NODE_ENV=production node dist/server.js",
         "dev": "cross-env NODE_ENV=development nodemon",
@@ -28,6 +32,7 @@
         "express": "^4.17.1",
         "helmet": "^4.6.0",
         "hpp": "^0.2.3",
+        "i18n": "^0.13.4",
         "jest": "^27.0.6",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^5.10.1",

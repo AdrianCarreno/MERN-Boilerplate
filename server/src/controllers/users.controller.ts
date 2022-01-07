@@ -1,7 +1,8 @@
-import { NextFunction, Request, Response } from 'express'
+import { locale } from '@configs/env'
 import { CreateUserDto } from '@dtos/users.dto'
 import { User } from '@interfaces/users.interface'
 import userService from '@services/users.service'
+import { NextFunction, Request, Response } from 'express'
 
 class UsersController {
     public userService = new userService()
@@ -19,7 +20,8 @@ class UsersController {
     public getUserById = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId: string = req.params.id
-            const findOneUserData: User = await this.userService.findUserById(userId)
+            const userLocale = req.cookies.Language || locale
+            const findOneUserData: User = await this.userService.findUserById(userId, userLocale)
 
             res.status(200).json({ data: findOneUserData, message: 'findOne' })
         } catch (error) {
@@ -30,7 +32,8 @@ class UsersController {
     public createUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userData: CreateUserDto = req.body
-            const createUserData: User = await this.userService.createUser(userData)
+            const userLocale = req.cookies.Language || locale
+            const createUserData: User = await this.userService.createUser(userData, locale)
 
             res.status(201).json({ data: createUserData, message: 'created' })
         } catch (error) {
@@ -42,7 +45,8 @@ class UsersController {
         try {
             const userId: string = req.params.id
             const userData: CreateUserDto = req.body
-            const updateUserData: User = await this.userService.updateUser(userId, userData)
+            const userLocale = req.cookies.Language || locale
+            const updateUserData: User = await this.userService.updateUser(userId, userData, userLocale)
 
             res.status(200).json({ data: updateUserData, message: 'updated' })
         } catch (error) {
@@ -53,7 +57,8 @@ class UsersController {
     public deleteUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId: string = req.params.id
-            const deleteUserData: User = await this.userService.deleteUser(userId)
+            const userLocale = req.cookies.Language || locale
+            const deleteUserData: User = await this.userService.deleteUser(userId, userLocale)
 
             res.status(200).json({ data: deleteUserData, message: 'deleted' })
         } catch (error) {
