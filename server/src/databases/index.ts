@@ -1,7 +1,4 @@
-import config from 'config'
-import { dbConfig } from '@interfaces/db.interface'
-
-const { host, port, database }: dbConfig = config.get('dbConfig')
+import { host, port, database } from '@configs/dbConfig'
 
 export const dbConnection = {
     url: `mongodb://${host}:${port}/${database}`,

@@ -1,0 +1,9 @@
+{
+    "An ID is required": "An ID is required",
+    "Credentials are required": "Credentials are required",
+    "Email {{email}} already exists": "Email {{email}} already exists",
+    "Email {{email}} not found": "Email {{email}} not found",
+    "User data is required": "User data is required",
+    "User not found": "User not found",
+    "Wrong password": "Wrong password"
+}
