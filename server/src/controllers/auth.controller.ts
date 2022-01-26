@@ -12,11 +12,10 @@ class AuthController {
         try {
             const userData: CreateUserDto = req.body
             const userLocale = req.cookies.Language || locale
-            const signUpUserData: User = await this.authService.signup(userData, userLocale)
-            const { cookie, findUser } = await this.authService.login(userData, userLocale)
+            const { cookie, createdUser } = await this.authService.signup(userData, userLocale)
 
             res.setHeader('Set-Cookie', [cookie])
-            res.status(201).json({ data: signUpUserData, message: 'signup' })
+            res.status(201).json({ data: createdUser, message: 'signup' })
         } catch (error) {
             next(error)
         }
@@ -43,6 +42,44 @@ class AuthController {
 
             res.setHeader('Set-Cookie', ['Authorization=; Max-age=0'])
             res.status(200).json({ data: logOutUserData, message: 'logout' })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    public verifyUserEmail = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const token: string = req.body?.token.toString()
+            const userId: string = this.authService.verifyToken(token, true)._id
+            const userLocale: string = req.cookies.Language || locale
+            const verifyUserData: User = await this.authService.verifyUserEmail(userId, userLocale)
+
+            res.status(200).json({ data: verifyUserData, message: 'verified' })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    public forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const email: string = req.body?.email?.toString()
+            const userLocale: string = req.cookies.Language || locale
+            const resetUserPassword: User = await this.authService.forgotPassword(email, userLocale)
+
+            res.status(200).json({ data: resetUserPassword, message: 'email sent' })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    public resetPassword = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const token: string = req.body?.token.toString()
+            const password: string = req.body?.password?.toString()
+            const userLocale: string = req.cookies.Language || locale
+            const resetUserPassword: User = await this.authService.resetPassword(token, password, userLocale)
+
+            res.status(200).json({ data: resetUserPassword, message: 'password reset' })
         } catch (error) {
             next(error)
         }

@@ -33,7 +33,7 @@ class UsersController {
         try {
             const userData: CreateUserDto = req.body
             const userLocale = req.cookies.Language || locale
-            const createUserData: User = await this.userService.createUser(userData, locale)
+            const createUserData: User = await this.userService.createUser(userData, userLocale)
 
             res.status(201).json({ data: createUserData, message: 'created' })
         } catch (error) {
