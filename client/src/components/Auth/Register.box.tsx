@@ -1,6 +1,9 @@
-import { useEffect, useState, ChangeEvent, FormEvent } from 'react'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
-import { Alert, Button, Form } from 'react-bootstrap'
+import { t } from 'i18next'
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { Alert, Button, Form, InputGroup } from 'react-bootstrap'
 
 interface IRegisterErrors {
     firstName?: string
@@ -30,6 +33,7 @@ export default function RegisterBox() {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [registered, setRegistered] = useState<boolean>(false)
     const [remainingTime, setRemainingTime] = useState<number>(0)
+    const [showPassword, setShowPassword] = useState<boolean>(false)
 
     useEffect(() => {
         setPasswordsMatch(inputs.password !== '' ? inputs.password === inputs.confirmPassword : undefined)
@@ -37,7 +41,7 @@ export default function RegisterBox() {
 
     useEffect(() => {
         if (passwordsMatch === true) setError({ ...error, confirmPassword: undefined })
-        else if (passwordsMatch === false) setError({ ...error, confirmPassword: 'Passwords do not match' })
+        else if (passwordsMatch === false) setError({ ...error, confirmPassword: t('registerPage:passwordsDontMatch') })
     }, [passwordsMatch])
 
     useEffect(() => {
@@ -73,16 +77,12 @@ export default function RegisterBox() {
             .finally(() => setIsLoading(false))
     }
     if (registered) {
-        return (
-            <Alert variant="success">
-                Registered!. In {remainingTime} seconds you will be redirected to the login page.
-            </Alert>
-        )
+        return <Alert variant="success">{t('registerPage:success', { count: remainingTime })}</Alert>
     } else {
         return (
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicFirstName">
-                    <Form.Label>First name</Form.Label>
+                    <Form.Label>{t('registerPage:firstName')}</Form.Label>
                     <Form.Control
                         required
                         name="firstName"
@@ -98,7 +98,7 @@ export default function RegisterBox() {
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicLastName">
-                    <Form.Label>Last name</Form.Label>
+                    <Form.Label>{t('registerPage:lastName')}</Form.Label>
                     <Form.Control
                         name="lastName"
                         type="text"
@@ -112,7 +112,7 @@ export default function RegisterBox() {
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
+                    <Form.Label>{t('registerPage:email')}</Form.Label>
                     <Form.Control
                         required
                         name="email"
@@ -125,38 +125,42 @@ export default function RegisterBox() {
                     <Form.Control.Feedback type="invalid">{error.email}</Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
+                <Form.Label>{t('registerPage:password')}</Form.Label>
+                <InputGroup className="mb-3">
                     <Form.Control
                         required
                         name="password"
-                        type="password"
-                        placeholder="Password"
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder={t('registerPage:password')}
                         autoComplete="current-password"
                         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                        title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                        title={t('registerPage:passwordRequirements')}
                         isInvalid={error.password !== undefined}
                         onChange={handleChange}
                     />
-                    <Form.Control.Feedback type="invalid">{error.password}</Form.Control.Feedback>
-                </Form.Group>
+                    <Button variant="outline-secondary" onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ? <Icon icon={faEyeSlash} /> : <Icon icon={faEye} />}
+                    </Button>
+                </InputGroup>
+                <Form.Control.Feedback type="invalid">{error.password}</Form.Control.Feedback>
+
                 <Form.Group className="mb-3" controlId="formBasicPasswordConfirmation">
-                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Label>{t('registerPage:confirmPassword')}</Form.Label>
                     <Form.Control
                         required
                         name="confirmPassword"
-                        type="password"
-                        placeholder="Re-enter password"
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder={t('registerPage:reEnterPassword')}
                         autoComplete="new-password"
                         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                        title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                        title={t('registerPage:passwordRequirements')}
                         isInvalid={error.confirmPassword !== undefined}
                         onChange={handleChange}
                     />
                     <Form.Control.Feedback type="invalid">{error.confirmPassword}</Form.Control.Feedback>
                 </Form.Group>
                 <Button variant="primary" type="submit" disabled={!passwordsMatch || isLoading}>
-                    {isLoading ? 'Loading...' : 'Submit'}
+                    {t(isLoading ? 'common:loading' : 'registerPage:submit')}
                 </Button>
             </Form>
         )

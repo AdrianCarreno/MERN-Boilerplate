@@ -11,7 +11,7 @@ class AuthController {
     public signUp = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userData: CreateUserDto = req.body
-            const userLocale = req.cookies.Language || locale
+            const userLocale = req.cookies.language || locale
             const { cookie, createdUser } = await this.authService.signup(userData, userLocale)
 
             res.setHeader('Set-Cookie', [cookie])
@@ -24,7 +24,7 @@ class AuthController {
     public logIn = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userData: CreateUserDto = req.body
-            const userLocale = req.cookies.Language || locale
+            const userLocale = req.cookies.language || locale
             const { cookie, findUser } = await this.authService.login(userData, userLocale)
 
             res.setHeader('Set-Cookie', [cookie])
@@ -37,7 +37,7 @@ class AuthController {
     public logOut = async (req: RequestWithUser, res: Response, next: NextFunction) => {
         try {
             const userData: User = req.user
-            const userLocale = req.cookies.Language || locale
+            const userLocale = req.cookies.language || locale
             const logOutUserData: User = await this.authService.logout(userData, userLocale)
 
             res.setHeader('Set-Cookie', ['Authorization=; Max-age=0'])
@@ -51,7 +51,7 @@ class AuthController {
         try {
             const token: string = req.body?.token.toString()
             const userId: string = this.authService.verifyToken(token, true)._id
-            const userLocale: string = req.cookies.Language || locale
+            const userLocale: string = req.cookies.language || locale
             const verifyUserData: User = await this.authService.verifyUserEmail(userId, userLocale)
 
             res.status(200).json({ data: verifyUserData, message: 'verified' })
@@ -63,7 +63,7 @@ class AuthController {
     public forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const email: string = req.body?.email?.toString()
-            const userLocale: string = req.cookies.Language || locale
+            const userLocale: string = req.cookies.language || locale
             const resetUserPassword: User = await this.authService.forgotPassword(email, userLocale)
 
             res.status(200).json({ data: resetUserPassword, message: 'email sent' })
@@ -76,7 +76,7 @@ class AuthController {
         try {
             const token: string = req.body?.token.toString()
             const password: string = req.body?.password?.toString()
-            const userLocale: string = req.cookies.Language || locale
+            const userLocale: string = req.cookies.language || locale
             const resetUserPassword: User = await this.authService.resetPassword(token, password, userLocale)
 
             res.status(200).json({ data: resetUserPassword, message: 'password reset' })

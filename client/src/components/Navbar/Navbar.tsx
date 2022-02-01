@@ -4,6 +4,8 @@ import { Dropdown } from 'react-bootstrap'
 import { NavLink } from 'react-router-dom'
 import { LoginModal } from '../Auth'
 import './Navbar.scss'
+import LanguageSelectorComponent from './LanguageSelector.component'
+import { t } from 'i18next'
 
 export default function Navbar() {
     return (
@@ -28,26 +30,29 @@ export default function Navbar() {
                 <ul className="navbar-nav ms-auto">
                     <li className="nav-item active">
                         <NavLink className="nav-link" to="/">
-                            <Icon icon={faHouseUser} /> Home
+                            <Icon icon={faHouseUser} /> {t('homePage:title')}
                         </NavLink>
                     </li>
                     <li className="nav-item active">
-                        <NavLink className="nav-link" to="/about">
-                            <Icon icon={faUsers} /> About us
+                        <NavLink className="nav-link" to={t('routes:about')}>
+                            <Icon icon={faUsers} /> {t('aboutPage:title')}
                         </NavLink>
                     </li>
                     <li className="nav-item active">
-                        <NavLink className="nav-link" to="/contact">
-                            <Icon icon={faEnvelope} /> Contact us
+                        <NavLink className="nav-link" to={t('routes:contact')}>
+                            <Icon icon={faEnvelope} /> {t('contactPage:title')}
                         </NavLink>
+                    </li>
+                    <li>
+                        <LanguageSelectorComponent />
                     </li>
                     <li className="nav-item active">
                         <Dropdown className="btn-group">
                             <LoginModal />
                             <Dropdown.Toggle split variant="success" id="dropdown-split-basic" />
                             <Dropdown.Menu>
-                                <Dropdown.Item href="/register">
-                                    <Icon icon={faUserPlus} /> Register
+                                <Dropdown.Item href={t('routes:register')}>
+                                    <Icon icon={faUserPlus} /> {t('registerPage:title')}
                                 </Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>

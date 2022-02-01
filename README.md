@@ -7,6 +7,7 @@ This boilerplate was made as a template to a developer wanting to build an app u
 1. [What is MERN?](#what-is-mern)
 1. [Installation](#installation)
 1. [Usage](#usage)
+1. [Translation](#translation)
 1. [License](#license)
 1. [Contributing](#contributing)
 1. [Questions](#questions)
@@ -70,6 +71,12 @@ There are many ways to deploy a node.js server, so it will no be detailed in thi
 cd ./client
 npm run build
 ```
+
+[Go up](#table-of-contents)
+
+# Translation
+
+Front end translation **should not be done using natural language**, because the library utilized is _key based_ and has reserved characters (like `:` and `.`). Back end translation can be done using natural language, but it is not recommended, as it makes the keys too long.
 
 [Go up](#table-of-contents)
 

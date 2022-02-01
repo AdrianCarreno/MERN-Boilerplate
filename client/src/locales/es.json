@@ -1,0 +1,44 @@
+{
+    "routes": {
+        "about": "acerca",
+        "contact": "contacto",
+        "login": "login",
+        "register": "registro",
+        "forgot-password": "olvide-contraseña",
+        "reset-password": "restablecer-contraseña",
+        "verify": "verificar"
+    },
+    "common": {
+        "loading": "Cargando..."
+    },
+    "homePage": {
+        "title": "Inicio",
+        "description": "Descripción de la página de inicio"
+    },
+    "aboutPage": {
+        "title": "Nosotros",
+        "description": "Descripción de la página Acerca de nosotros"
+    },
+    "contactPage": {
+        "title": "Contacto",
+        "description": "Descripción de la página de contacto"
+    },
+    "registerPage": {
+        "title": "Registro",
+        "firstName": "Nombre",
+        "lastName": "Apellido",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "confirmPassword": "Confirmar contraseña",
+        "reEnterPassword": "Vuelva a escribir la contraseña",
+        "passwordRequirements": "Debe contener al menos un número y una letra mayúscula y minúscula, y al menos 8 caracteres",
+        "passwordsDontMatch": "Las contraseñas no coinciden",
+        "submit": "Registrarse",
+        "success_one": "¡Registrado! En {{count}} segundo será redirigido a la página de inicio.",
+        "success_other": "¡Registrado! En {{count}} segundos será redirigido a la página de inicio."
+    },
+    "notFound": {
+        "title": "404",
+        "description": "Página no encontrada"
+    }
+}

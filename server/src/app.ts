@@ -103,8 +103,8 @@ class App {
         i18n.configure({
             directory: __dirname + '/locales',
             defaultLocale: this.locale,
-            queryParameter: 'Language',
-            cookie: 'Language',
+            queryParameter: 'language',
+            cookie: 'language',
             register: global
         })
     }

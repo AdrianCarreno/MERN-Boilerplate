@@ -1,10 +1,13 @@
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
-import { useState, ChangeEvent, FormEvent } from 'react'
-import { Button, Form } from 'react-bootstrap'
+import { ChangeEvent, FormEvent, useState } from 'react'
+import { Button, Form, InputGroup } from 'react-bootstrap'
 import './Auth.scss'
 
 export default function LoginBox() {
     const [inputs, setInputs] = useState({})
+    const [showPassword, setShowPassword] = useState<boolean>(false)
     const [error, setError] = useState<boolean>(false)
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -40,16 +43,20 @@ export default function LoginBox() {
                 <Form.Control.Feedback type="invalid">Wrong credentials.</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
+            <Form.Label>Password</Form.Label>
+            <InputGroup className="mb-3">
                 <Form.Control
                     name="password"
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="Password"
                     autoComplete="current-password"
                     onChange={handleChange}
                 />
-            </Form.Group>
+                <Button variant="outline-secondary" onClick={() => setShowPassword(!showPassword)}>
+                    {showPassword ? <Icon icon={faEyeSlash} /> : <Icon icon={faEye} />}
+                </Button>
+            </InputGroup>
+
             <Button variant="primary" type="submit">
                 Submit
             </Button>

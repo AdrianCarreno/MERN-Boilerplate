@@ -1,0 +1,44 @@
+{
+    "routes": {
+        "about": "about",
+        "contact": "contact",
+        "login": "login",
+        "register": "register",
+        "forgot-password": "forgot-password",
+        "reset-password": "reset-password",
+        "verify": "verify"
+    },
+    "common": {
+        "loading": "Loading..."
+    },
+    "homePage": {
+        "title": "Home",
+        "description": "Home page description"
+    },
+    "aboutPage": {
+        "title": "About Us",
+        "description": "About Us page description"
+    },
+    "contactPage": {
+        "title": "Contact Us",
+        "description": "Contact Us page description"
+    },
+    "registerPage": {
+        "title": "Register",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm password",
+        "reEnterPassword": "Re-enter password",
+        "paswordRequirements": "Must contain at least one number and one uppercase and lowercase letter, and at least 8 characters",
+        "passwordsDontMatch": "Passwords do not match",
+        "submit": "Register",
+        "success_one": "Registered!. In {{count}} second you will be redirected to the home page.",
+        "success_other": "Registered!. In {{count}} seconds you will be redirected to the home page."
+    },
+    "notFound": {
+        "title": "404",
+        "description": "Page not found"
+    }
+}

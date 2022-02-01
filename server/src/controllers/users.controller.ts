@@ -20,7 +20,7 @@ class UsersController {
     public getUserById = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId: string = req.params.id
-            const userLocale = req.cookies.Language || locale
+            const userLocale = req.cookies.language || locale
             const findOneUserData: User = await this.userService.findUserById(userId, userLocale)
 
             res.status(200).json({ data: findOneUserData, message: 'findOne' })
@@ -32,7 +32,7 @@ class UsersController {
     public createUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userData: CreateUserDto = req.body
-            const userLocale = req.cookies.Language || locale
+            const userLocale = req.cookies.language || locale
             const createUserData: User = await this.userService.createUser(userData, userLocale)
 
             res.status(201).json({ data: createUserData, message: 'created' })
@@ -45,7 +45,7 @@ class UsersController {
         try {
             const userId: string = req.params.id
             const userData: CreateUserDto = req.body
-            const userLocale = req.cookies.Language || locale
+            const userLocale = req.cookies.language || locale
             const updateUserData: User = await this.userService.updateUser(userId, userData, userLocale)
 
             res.status(200).json({ data: updateUserData, message: 'updated' })
@@ -57,7 +57,7 @@ class UsersController {
     public deleteUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId: string = req.params.id
-            const userLocale = req.cookies.Language || locale
+            const userLocale = req.cookies.language || locale
             const deleteUserData: User = await this.userService.deleteUser(userId, userLocale)
 
             res.status(200).json({ data: deleteUserData, message: 'deleted' })
