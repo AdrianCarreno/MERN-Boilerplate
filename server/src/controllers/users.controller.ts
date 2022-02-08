@@ -8,6 +8,7 @@ import { Role } from '@/interfaces/roles.interface'
 import { __ } from 'i18n'
 import roleModel from '@/models/roles.model'
 import { HttpException } from '@/exceptions/HttpException'
+import { Schema } from 'mongoose'
 
 class UsersController {
     public userService = new UserService()
@@ -33,8 +34,8 @@ class UsersController {
     public getUserById = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId: string = req.params.id
-            const userLocale = req.cookies.Language || locale
-            const userIdObj = require('mongodb').ObjectId(userId)
+            const userLocale = req.cookies.language || locale
+            const userIdObj = new Schema.Types.ObjectId(userId)
             const findOneUserData: User = await this.userService.findUserById(userIdObj, userLocale)
 
             res.status(200).json({ data: findOneUserData, message: 'findOne' })
@@ -47,8 +48,8 @@ class UsersController {
         try {
             const userId: string = req.params.id
             const userLocale = req.cookies.Language || locale
-            const userIdObj = require('mongodb').ObjectId(userId)
-            const organizationId = require('mongodb').ObjectId(req.params.organizationId)
+            const userIdObj = new Schema.Types.ObjectId(userId)
+            const organizationId = new Schema.Types.ObjectId(req.params.organizationId)
             const findOneUserData: User = await this.userService.findUserByIdByOrg(
                 userIdObj,
                 userLocale,
