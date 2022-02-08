@@ -1,20 +1,22 @@
-import { keys } from '@/configs'
 import { NextFunction, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import { HttpException } from '@exceptions/HttpException'
 import { DataStoredInToken, RequestWithUser } from '@interfaces/auth.interface'
 import userModel from '@models/users.model'
+import { keys } from '@/configs'
 
 const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-        const Authorization = req.cookies['Authorization'] || req.header('Authorization').split('Bearer ')[1] || null
-
+        const Authorization = req.cookies.Authorization || req.header('Authorization').split('Bearer ')[1] || null
         if (Authorization) {
             const secretKey: string = keys.secretKey
             const verificationResponse = (await jwt.verify(Authorization, secretKey)) as DataStoredInToken
             const userId = verificationResponse._id
-            const findUser = await userModel.findById(userId)
-
+            const findUser = await userModel.findById(userId, '-password').populate({
+                path: 'roles',
+                model: 'Role',
+                populate: { path: 'organizationId', model: 'Organization' }
+            })
             if (findUser) {
                 req.user = findUser
                 next()

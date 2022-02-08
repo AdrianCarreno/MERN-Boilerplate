@@ -1,5 +1,7 @@
+import { Role } from './roles.interface'
+import { ObjectId } from 'mongoose'
 export interface User {
-    _id: string
+    _id: ObjectId
     firstName: string
     lastName: string
     fullName: string
@@ -7,6 +9,7 @@ export interface User {
     email: string
     password: string
     emailVerifiedAt: Date | null
-    createdAt: Date
-    updatedAt: Date
+    createdAt?: Date
+    updatedAt?: Date
+    roles: Array<Role>
 }

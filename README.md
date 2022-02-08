@@ -38,6 +38,7 @@ npm run update
 
 And it will update the root, then the server, resolve dependencies with vulnerabilities, and then do the same for the client. After running this command, the entire project should be up to date.
 
+
 [Go up](#table-of-contents)
 
 # Usage
@@ -62,6 +63,18 @@ To start the backend server, and a development frontend server. Upon starting th
 ```
 
 The property `lastName` is optional. Upon signing up, the application will return a cookie with the token of the user, so every request will be authenticated.
+
+Some errors you could experience and possible solutions:
+
+1. While running the server, `[nodemon] app crashed - waiting for file changes before starting...`
+
+Solution:
+
+```
+npm install -g ts-node
+```
+
+It will install the dependencies of ts-node to run the app.
 
 ## Publishing
 

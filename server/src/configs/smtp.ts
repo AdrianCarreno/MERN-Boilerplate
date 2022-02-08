@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const host: string | undefined = process.env.SMTP_HOST
 const port: number | undefined = parseInt(process.env.SMTP_PORT)
 const user: string | undefined = process.env.SMTP_USER

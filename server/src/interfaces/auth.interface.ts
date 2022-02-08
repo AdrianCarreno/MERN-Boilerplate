@@ -1,8 +1,9 @@
 import { Request } from 'express'
 import { User } from '@interfaces/users.interface'
-
+import { ObjectId } from 'mongoose'
+import { Role } from './roles.interface'
 export interface DataStoredInToken {
-    _id: string
+    _id: ObjectId
 }
 
 export interface TokenData {
@@ -12,4 +13,5 @@ export interface TokenData {
 
 export interface RequestWithUser extends Request {
     user: User
+    role: Role
 }

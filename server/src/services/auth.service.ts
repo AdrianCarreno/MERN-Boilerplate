@@ -1,17 +1,18 @@
 import { env, keys } from '@configs/index'
-import { CreateUserDto } from '@dtos/users.dto'
+import { CreateUserDto, LoginUserDto } from '@dtos/users.dto'
 import { HttpException } from '@exceptions/HttpException'
 import { DataStoredInToken, TokenData } from '@interfaces/auth.interface'
 import { User } from '@interfaces/users.interface'
 import userModel from '@models/users.model'
 import { asset, frontendAsset, isEmpty } from '@utils/util'
+import { logger } from '@/utils/logger'
+import { generateHTML } from '@/utils/html'
 import bcrypt from 'bcrypt'
 import { __ } from 'i18n'
 import jwt from 'jsonwebtoken'
 import { sendHTMLEmail } from './email.service'
-import { logger } from '@/utils/logger'
-import { generateHTML } from '@/utils/html'
 import path from 'path'
+import { ObjectId } from 'mongoose'
 
 class AuthService {
     public users = userModel
@@ -31,7 +32,6 @@ class AuthService {
 
         const hashedPassword = await bcrypt.hash(userData.password, 10)
         const createUserData: User = await this.users.create({ ...userData, password: hashedPassword })
-
         const loginToken = this.createToken(createUserData)
         const cookie = this.createCookie(loginToken)
 
@@ -46,7 +46,7 @@ class AuthService {
         sendHTMLEmail(
             createUserData.email,
             __({ phrase: 'Verify your email', locale }),
-            generateHTML(path.join(__dirname + `/../email.templates/verify.email.template/${locale}.html`), args),
+            generateHTML(path.join(__dirname, `/../email.templates/verify.email.template/${locale}.html`), args),
             { attachments: [{ filename: 'logo.png', path: frontendAsset('images/logo.png'), cid: 'logo' }] }
         ).catch(err => logger.error(__({ phrase: err.message, locale })))
 
@@ -54,9 +54,9 @@ class AuthService {
     }
 
     public async login(
-        userData: CreateUserDto,
+        userData: LoginUserDto,
         locale: string = env.locale
-    ): Promise<{ cookie: string; findUser: User }> {
+    ): Promise<{ cookie: string; findUser: User; token: TokenData }> {
         if (isEmpty(userData)) throw new HttpException(400, __({ phrase: 'Credentials are required', locale }))
 
         const findUser: User = await this.users.findOne({ email: userData.email })
@@ -66,10 +66,10 @@ class AuthService {
         const isPasswordMatching: boolean = await bcrypt.compare(userData.password, findUser.password)
         if (!isPasswordMatching) throw new HttpException(409, __({ phrase: 'Wrong password', locale }))
 
-        const tokenData = this.createToken(findUser)
-        const cookie = this.createCookie(tokenData)
+        const token = this.createToken(findUser, 3600)
+        const cookie = this.createCookie(token)
 
-        return { cookie, findUser }
+        return { cookie, findUser, token }
     }
 
     public async logout(userData: User, locale: string = env.locale): Promise<User> {
@@ -82,7 +82,7 @@ class AuthService {
         return findUser
     }
 
-    public async verifyUserEmail(userId: string, locale: string = env.locale): Promise<User> {
+    public async verifyUserEmail(userId: ObjectId, locale: string = env.locale): Promise<User> {
         if (isEmpty(userId)) throw new HttpException(400, __({ phrase: 'An ID is required', locale }))
 
         let findUser = await this.users.findOne({ _id: userId })
@@ -116,7 +116,7 @@ class AuthService {
         await sendHTMLEmail(
             findUser.email,
             __({ phrase: 'Reset your password', locale }),
-            generateHTML(path.join(__dirname + `/../email.templates/reset.password.template/${locale}.html`), args),
+            generateHTML(path.join(__dirname, `/../email.templates/reset.password.template/${locale}.html`), args),
             { attachments: [{ filename: 'logo.png', path: frontendAsset('images/logo.png'), cid: 'logo' }] }
         ).catch(err => logger.error(__({ phrase: err.message, locale })))
 
@@ -147,14 +147,14 @@ class AuthService {
         return findUser
     }
 
-    public createToken(user: User, expiresIn: number = 3600): TokenData {
-        const dataStoredInToken: DataStoredInToken = { _id: user._id }
+    public createToken(user: User, expiresIn = 3600): TokenData {
+        const dataStoredInToken: DataStoredInToken = { _id: user._id } // user._id, [organizationId, resources]
         const secretKey: string = keys.secretKey
 
         return { expiresIn, token: jwt.sign(dataStoredInToken, secretKey, { expiresIn }) }
     }
 
-    public verifyToken(token: string, ignoreExpiration: boolean = false): DataStoredInToken {
+    public verifyToken(token: string, ignoreExpiration = false): DataStoredInToken {
         const secretKey: string = keys.secretKey
 
         return jwt.verify(token, secretKey, { ignoreExpiration }) as DataStoredInToken
