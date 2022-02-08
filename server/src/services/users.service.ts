@@ -8,7 +8,6 @@ import userModel from '@models/users.model'
 import { isEmpty } from '@utils/util'
 import bcrypt from 'bcrypt'
 import { __ } from 'i18n'
-import { ObjectId } from 'mongoose'
 
 class UserService {
     public users = userModel
@@ -33,7 +32,7 @@ class UserService {
         return users
     }
 
-    public async findUserById(userId: ObjectId, locale: string = env.locale): Promise<User> {
+    public async findUserById(userId: string, locale: string = env.locale): Promise<User> {
         if (isEmpty(userId)) throw new HttpException(400, __({ phrase: 'An ID is required', locale }))
         const findUser: User = await this.users.findOne({ _id: userId }, '-password').populate('roles')
 
@@ -42,14 +41,14 @@ class UserService {
         return findUser
     }
 
-    public async findUserByIdByOrg(userId: ObjectId, locale: string = env.locale, org: ObjectId): Promise<User> {
+    public async findUserByIdByOrg(userId: string, locale: string = env.locale, org: string): Promise<User> {
         if (isEmpty(userId)) throw new HttpException(400, __({ phrase: 'An ID is required', locale }))
         if (isEmpty(org)) throw new HttpException(400, __({ phrase: 'An Organization ID is required', locale }))
 
         const orgFound = await organizationModel.findById(org)
         if (!orgFound) throw new HttpException(409, __({ phrase: 'Organization not found', locale }))
 
-        const userInfo = 'firstName lastName roles email -password'
+        const userInfo = 'firstName lastName roles email'
         const findUser: User = await this.users
             .findOne({ _id: userId }, userInfo)
             .populate({ path: 'roles', model: 'Role', match: { organizationId: { $eq: org } } })

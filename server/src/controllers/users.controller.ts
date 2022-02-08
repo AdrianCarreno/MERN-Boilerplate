@@ -8,8 +8,6 @@ import { Role } from '@/interfaces/roles.interface'
 import { __ } from 'i18n'
 import roleModel from '@/models/roles.model'
 import { HttpException } from '@/exceptions/HttpException'
-import { Schema } from 'mongoose'
-
 class UsersController {
     public userService = new UserService()
 
@@ -35,8 +33,7 @@ class UsersController {
         try {
             const userId: string = req.params.id
             const userLocale = req.cookies.language || locale
-            const userIdObj = new Schema.Types.ObjectId(userId)
-            const findOneUserData: User = await this.userService.findUserById(userIdObj, userLocale)
+            const findOneUserData: User = await this.userService.findUserById(userId, userLocale)
 
             res.status(200).json({ data: findOneUserData, message: 'findOne' })
         } catch (error) {
@@ -47,14 +44,9 @@ class UsersController {
     public getUserByIdByOrg = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId: string = req.params.id
-            const userLocale = req.cookies.Language || locale
-            const userIdObj = new Schema.Types.ObjectId(userId)
-            const organizationId = new Schema.Types.ObjectId(req.params.organizationId)
-            const findOneUserData: User = await this.userService.findUserByIdByOrg(
-                userIdObj,
-                userLocale,
-                organizationId
-            )
+            const organizationId: string = req.params.organizationId
+            const userLocale = req.cookies.language || locale
+            const findOneUserData: User = await this.userService.findUserByIdByOrg(userId, userLocale, organizationId)
 
             res.status(200).json({ data: findOneUserData, message: 'findOne' })
         } catch (error) {
@@ -65,7 +57,7 @@ class UsersController {
     public createUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userData: CreateUserDto = req.body
-            const userLocale = req.cookies.Language || locale
+            const userLocale = req.cookies.language || locale
             const createUserData: User = await this.userService.createUser(userData, userLocale)
 
             res.status(201).json({ data: createUserData, message: 'created' })
@@ -78,7 +70,7 @@ class UsersController {
         try {
             const userId: string = req.params.id
             const userData: CreateUserDto = req.body
-            const userLocale = req.cookies.Language || locale
+            const userLocale = req.cookies.language || locale
             const updateUserData: User = await this.userService.updateUser(userId, userData, userLocale)
 
             res.status(200).json({ data: updateUserData, message: 'updated' })
@@ -91,7 +83,7 @@ class UsersController {
         try {
             const userId: string = req.params.id
             const roleId: addRoleDto = req.body
-            const userLocale = req.cookies.Language || locale
+            const userLocale = req.cookies.language || locale
 
             const findRole: Role = await roleModel.findById(roleId._id)
             if (!findRole) throw new HttpException(409, __({ phrase: 'Role not found', locale }))
@@ -116,7 +108,7 @@ class UsersController {
         try {
             const userId: string = req.params.id
             const roleId: addRoleDto = req.body
-            const userLocale = req.cookies.Language || locale
+            const userLocale = req.cookies.language || locale
 
             const findRole: Role = await roleModel.findById(roleId._id)
             if (!findRole) throw new HttpException(409, __({ phrase: 'Role not found', locale }))
@@ -138,7 +130,7 @@ class UsersController {
     public deleteUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId: string = req.params.id
-            const userLocale = req.cookies.Language || locale
+            const userLocale = req.cookies.language || locale
             const deleteUserData: User = await this.userService.deleteUser(userId, userLocale)
 
             res.status(200).json({ data: deleteUserData, message: 'deleted' })
@@ -149,7 +141,8 @@ class UsersController {
 
     public getUserByHeader = async (req: RequestWithUser, res: Response, next: NextFunction) => {
         try {
-            const findOneUserData: User = await this.userService.findUserById(req.user._id)
+            const userId: string = req.user._id.toString()
+            const findOneUserData: User = await this.userService.findUserById(userId)
 
             res.status(200).json({ data: findOneUserData, message: 'findOne' })
         } catch (error) {

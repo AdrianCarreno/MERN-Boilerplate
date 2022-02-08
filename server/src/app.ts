@@ -104,8 +104,8 @@ class App {
             // eslint-disable-next-line node/no-path-concat
             directory: __dirname + '/locales',
             defaultLocale: this.locale,
-            queryParameter: 'Language',
-            cookie: 'Language',
+            queryParameter: 'language',
+            cookie: 'language',
             register: global
         })
     }
