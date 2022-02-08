@@ -1,9 +1,10 @@
 import { locale } from '@configs/env'
-import { CreateUserDto } from '@dtos/users.dto'
+import { CreateUserDto, LoginUserDto } from '@dtos/users.dto'
 import { RequestWithUser } from '@interfaces/auth.interface'
 import { User } from '@interfaces/users.interface'
 import AuthService from '@services/auth.service'
 import { NextFunction, Request, Response } from 'express'
+import { ObjectId } from 'mongoose'
 
 class AuthController {
     public authService = new AuthService()
@@ -12,9 +13,8 @@ class AuthController {
         try {
             const userData: CreateUserDto = req.body
             const userLocale = req.cookies.Language || locale
-            const { cookie, createdUser } = await this.authService.signup(userData, userLocale)
+            const createdUser = await this.authService.signup(userData, userLocale)
 
-            res.setHeader('Set-Cookie', [cookie])
             res.status(201).json({ data: createdUser, message: 'signup' })
         } catch (error) {
             next(error)
@@ -23,12 +23,12 @@ class AuthController {
 
     public logIn = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const userData: CreateUserDto = req.body
+            const userData: LoginUserDto = req.body
             const userLocale = req.cookies.Language || locale
-            const { cookie, findUser } = await this.authService.login(userData, userLocale)
+            const { cookie, findUser, token } = await this.authService.login(userData, userLocale)
 
             res.setHeader('Set-Cookie', [cookie])
-            res.status(200).json({ data: findUser, message: 'login' })
+            res.status(200).json({ data: findUser, token: token.token, message: 'login' })
         } catch (error) {
             next(error)
         }
@@ -50,7 +50,7 @@ class AuthController {
     public verifyUserEmail = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const token: string = req.body?.token.toString()
-            const userId: string = this.authService.verifyToken(token, true)._id
+            const userId: ObjectId = this.authService.verifyToken(token, true)._id
             const userLocale: string = req.cookies.Language || locale
             const verifyUserData: User = await this.authService.verifyUserEmail(userId, userLocale)
 

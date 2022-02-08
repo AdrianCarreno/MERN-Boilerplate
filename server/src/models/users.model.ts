@@ -24,7 +24,13 @@ const userSchema: Schema = new Schema(
             type: Date,
             default: null,
             required: false
-        }
+        },
+        roles: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Role'
+            }
+        ]
     },
     {
         timestamps: true,

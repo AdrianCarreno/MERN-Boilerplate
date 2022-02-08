@@ -2,7 +2,7 @@ import { dir } from '@configs/log'
 import fs from 'fs'
 import path from 'path'
 import winston from 'winston'
-import winstonDaily from 'winston-daily-rotate-file'
+import WinstonDaily from 'winston-daily-rotate-file'
 
 // logs dir
 const logDir: string = path.join(__dirname, dir)
@@ -24,7 +24,7 @@ const logFormat = winston.format.combine(
 const logger = winston.createLogger({
     transports: [
         // debug log setting
-        new winstonDaily({
+        new WinstonDaily({
             level: 'debug',
             datePattern: 'YYYY-MM-DD',
             dirname: logDir + '/debug', // log file /logs/debug/*.log in save
@@ -35,7 +35,7 @@ const logger = winston.createLogger({
             format: logFormat
         }),
         // error log setting
-        new winstonDaily({
+        new WinstonDaily({
             level: 'error',
             datePattern: 'YYYY-MM-DD',
             dirname: logDir + '/error', // log file /logs/error/*.log in save

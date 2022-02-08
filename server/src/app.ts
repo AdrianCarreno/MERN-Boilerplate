@@ -1,5 +1,3 @@
-process.env['SUPPRESS_NO_CONFIG_WARNING'] = 'true'
-
 import compression from 'compression'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
@@ -16,6 +14,8 @@ import { Routes } from '@interfaces/routes.interface'
 import errorMiddleware from '@middlewares/error.middleware'
 import { logger, stream } from '@utils/logger'
 import i18n from 'i18n'
+
+process.env.SUPPRESS_NO_CONFIG_WARNING = 'true'
 
 class App {
     public app: express.Application
@@ -101,6 +101,7 @@ class App {
 
     public configureI18n() {
         i18n.configure({
+            // eslint-disable-next-line node/no-path-concat
             directory: __dirname + '/locales',
             defaultLocale: this.locale,
             queryParameter: 'Language',

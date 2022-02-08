@@ -16,7 +16,8 @@ describe('Testing Auth', () => {
                 firstName: 'John',
                 lastName: 'Doe',
                 email: 'test@yopmail.com',
-                password: 'q1w2e3r4!'
+                password: 'q1w2e3r4!',
+                roles: ['']
             }
 
             const authRoute = new AuthRoute()

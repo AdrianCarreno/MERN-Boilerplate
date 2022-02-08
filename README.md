@@ -63,9 +63,9 @@ To start the backend server, and a development frontend server. Upon starting th
 
 The property `lastName` is optional. Upon signing up, the application will return a cookie with the token of the user, so every request will be authenticated.
 
-Some errors you could experience and some solutions:
+Some errors you could experience and possible solutions:
 
-1. While running the server, `[nodemon] app crashed...`
+1. While running the server, `[nodemon] app crashed - waiting for file changes before starting...`
 
 Solution:
 

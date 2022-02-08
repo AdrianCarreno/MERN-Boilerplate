@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator'
-
+import { ObjectId } from 'mongoose'
 export class CreateUserDto {
     @IsString()
     @IsNotEmpty()
@@ -16,6 +16,10 @@ export class CreateUserDto {
     @IsString()
     @IsNotEmpty()
     password: string
+
+    @IsOptional()
+    @IsNotEmpty()
+    roles: Array<string>
 }
 
 export class UpdateUserDto {
@@ -37,6 +41,10 @@ export class UpdateUserDto {
     @IsString()
     @IsNotEmpty()
     password: string
+
+    @IsOptional()
+    @IsNotEmpty()
+    roles: Array<ObjectId>
 }
 
 export class LoginUserDto {
@@ -45,4 +53,10 @@ export class LoginUserDto {
 
     @IsString()
     password: string
+}
+
+export class addRoleDto {
+    @IsString()
+    @IsNotEmpty()
+    _id: string
 }

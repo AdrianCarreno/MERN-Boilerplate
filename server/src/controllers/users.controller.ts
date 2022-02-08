@@ -1,16 +1,29 @@
 import { locale } from '@configs/env'
-import { CreateUserDto } from '@dtos/users.dto'
+import { addRoleDto, CreateUserDto } from '@dtos/users.dto'
 import { User } from '@interfaces/users.interface'
-import userService from '@services/users.service'
+import UserService from '@services/users.service'
 import { NextFunction, Request, Response } from 'express'
+import { RequestWithUser } from '@interfaces/auth.interface'
+import { Role } from '@/interfaces/roles.interface'
+import { __ } from 'i18n'
+import roleModel from '@/models/roles.model'
+import { HttpException } from '@/exceptions/HttpException'
 
 class UsersController {
-    public userService = new userService()
+    public userService = new UserService()
 
-    public getUsers = async (req: Request, res: Response, next: NextFunction) => {
+    public getUsersByOrganization = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+        try {
+            const findAllUsersData: User[] = await this.userService.findAllUserByOrg(req.params.organizationId)
+            res.status(200).json({ data: findAllUsersData, message: 'findAll' })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    public getUsers = async (req: RequestWithUser, res: Response, next: NextFunction) => {
         try {
             const findAllUsersData: User[] = await this.userService.findAllUser()
-
             res.status(200).json({ data: findAllUsersData, message: 'findAll' })
         } catch (error) {
             next(error)
@@ -21,7 +34,26 @@ class UsersController {
         try {
             const userId: string = req.params.id
             const userLocale = req.cookies.Language || locale
-            const findOneUserData: User = await this.userService.findUserById(userId, userLocale)
+            const userIdObj = require('mongodb').ObjectId(userId)
+            const findOneUserData: User = await this.userService.findUserById(userIdObj, userLocale)
+
+            res.status(200).json({ data: findOneUserData, message: 'findOne' })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    public getUserByIdByOrg = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const userId: string = req.params.id
+            const userLocale = req.cookies.Language || locale
+            const userIdObj = require('mongodb').ObjectId(userId)
+            const organizationId = require('mongodb').ObjectId(req.params.organizationId)
+            const findOneUserData: User = await this.userService.findUserByIdByOrg(
+                userIdObj,
+                userLocale,
+                organizationId
+            )
 
             res.status(200).json({ data: findOneUserData, message: 'findOne' })
         } catch (error) {
@@ -54,6 +86,54 @@ class UsersController {
         }
     }
 
+    public addRoleToUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+        try {
+            const userId: string = req.params.id
+            const roleId: addRoleDto = req.body
+            const userLocale = req.cookies.Language || locale
+
+            const findRole: Role = await roleModel.findById(roleId._id)
+            if (!findRole) throw new HttpException(409, __({ phrase: 'Role not found', locale }))
+            const findMatch = req.user.roles.find(role => {
+                if (role._id) {
+                    return role._id.toString() === findRole._id.toString()
+                } else return null
+            })
+            if (!findMatch) {
+                if (!req.role)
+                    throw new HttpException(409, __({ phrase: 'You do not belong to this organization', locale }))
+            }
+            const updateUserData: User = await this.userService.addRoleToUser(userId, findRole, userLocale)
+
+            res.status(200).json({ data: updateUserData, message: 'updated' })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    public removeRoleToUser = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+        try {
+            const userId: string = req.params.id
+            const roleId: addRoleDto = req.body
+            const userLocale = req.cookies.Language || locale
+
+            const findRole: Role = await roleModel.findById(roleId._id)
+            if (!findRole) throw new HttpException(409, __({ phrase: 'Role not found', locale }))
+            const findMatch = req.user.roles.find(role => {
+                return role._id.toString() === findRole._id.toString()
+            })
+            if (!findMatch) {
+                if (!req.role)
+                    throw new HttpException(409, __({ phrase: 'You do not belong to this organization', locale }))
+            }
+            const updateUserData: User = await this.userService.removeRoleToUser(userId, findRole, userLocale)
+
+            res.status(200).json({ data: updateUserData, message: 'updated' })
+        } catch (error) {
+            next(error)
+        }
+    }
+
     public deleteUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const userId: string = req.params.id
@@ -61,6 +141,16 @@ class UsersController {
             const deleteUserData: User = await this.userService.deleteUser(userId, userLocale)
 
             res.status(200).json({ data: deleteUserData, message: 'deleted' })
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    public getUserByHeader = async (req: RequestWithUser, res: Response, next: NextFunction) => {
+        try {
+            const findOneUserData: User = await this.userService.findUserById(req.user._id)
+
+            res.status(200).json({ data: findOneUserData, message: 'findOne' })
         } catch (error) {
             next(error)
         }
