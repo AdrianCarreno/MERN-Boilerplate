@@ -13,7 +13,11 @@ class UsersController {
 
     public getUsersByOrganization = async (req: RequestWithUser, res: Response, next: NextFunction) => {
         try {
-            const findAllUsersData: User[] = await this.userService.findAllUserByOrg(req.params.organizationId)
+            const userLocale = req.cookies.language || locale
+            const findAllUsersData: User[] = await this.userService.findAllUserByOrg(
+                req.params.organizationId,
+                userLocale
+            )
             res.status(200).json({ data: findAllUsersData, message: 'findAll' })
         } catch (error) {
             next(error)

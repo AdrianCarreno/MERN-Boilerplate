@@ -24,14 +24,14 @@ class OrganizationsRoute implements Routes {
         this.router.post(
             `${this.path}/createOrg`,
             authMiddleware,
-            grantAccess('PermissionOrganization', 'createAny'),
+            grantAccess('createAny', 'OrganizationPermission'),
             validationMiddleware(CreateOrgDto, 'body', true),
             createOrg
         )
         this.router.put(
             `${this.path}/update/organization/:organizationId`,
             authMiddleware,
-            grantAccess('PermissionOrganization', 'updateAny'),
+            grantAccess('updateAny', 'OrganizationPermission'),
             validationMiddleware(UpdateOrgDto, 'body', true),
             updateOrganization
         )
