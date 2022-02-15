@@ -4,7 +4,7 @@ import { ContactForm } from '../../components'
 export default function ContactPage() {
     return (
         <div className="container">
-            <h1 className="text-center" style={{ paddingTop: '20%' }}>
+            <h1 className="text-center" style={{ paddingTop: '15vh' }}>
                 {t('contactPage:title')}
             </h1>
             <ContactForm />

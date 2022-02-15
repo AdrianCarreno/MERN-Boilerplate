@@ -17,6 +17,7 @@
     },
     "aboutPage": {
         "title": "Nosotros",
+        "title-view": "Conociéndonos un poco más",
         "description": "Descripción de la página Acerca de nosotros"
     },
     "contactPage": {

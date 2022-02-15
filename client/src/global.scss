@@ -101,6 +101,31 @@
     background-color: rgb(112, 125, 161);
 }
 
+/* About */
+
+.about-content {
+    height: 300px;
+    margin: 50px 0px;
+    width: 100%;
+    background-color: cadetblue;
+}
+
+.founders-content {
+    width: 100%;
+    margin: 50px 0px;
+}
+
+.profile-content {
+    padding: 10px;
+}
+
+.image-profile {
+    border-radius: 50%;
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
+}
+
 /* Footer */
 
 .footer {

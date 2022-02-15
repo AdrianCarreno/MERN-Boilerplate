@@ -17,6 +17,7 @@
     },
     "aboutPage": {
         "title": "About Us",
+        "title-view": "Getting to know each other a little better",
         "description": "About Us page description"
     },
     "contactPage": {
