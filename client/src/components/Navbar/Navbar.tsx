@@ -4,12 +4,13 @@ import { Dropdown } from 'react-bootstrap'
 import { NavLink } from 'react-router-dom'
 import { LoginModal } from '../Auth'
 import './Navbar.scss'
+import '../../global.scss'
 import LanguageSelectorComponent from './LanguageSelector.component'
 import { t } from 'i18next'
 
 export default function Navbar() {
     return (
-        <nav className="navbar navbar-expand-lg navbar-mainbg">
+        <nav className="navbar navbar-expand-lg navbar-mainbg fixed-top padding-10">
             <NavLink className="navbar-brand navbar-logo" to="/">
                 <img src="logo192.png" alt="logo" />
             </NavLink>
@@ -29,17 +30,17 @@ export default function Navbar() {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav ms-auto">
                     <li className="nav-item active">
-                        <NavLink className="nav-link" to="/">
+                        <NavLink className="nav-link" to="/" data-toggle="collapse" data-target="#navbarSupportedContent">
                             <Icon icon={faHouseUser} /> {t('homePage:title')}
                         </NavLink>
                     </li>
                     <li className="nav-item active">
-                        <NavLink className="nav-link" to={t('routes:about')}>
+                        <NavLink className="nav-link" to={t('routes:about')} data-toggle="collapse" data-target="#navbarSupportedContent">
                             <Icon icon={faUsers} /> {t('aboutPage:title')}
                         </NavLink>
                     </li>
                     <li className="nav-item active">
-                        <NavLink className="nav-link" to={t('routes:contact')}>
+                        <NavLink className="nav-link" to={t('routes:contact')} data-toggle="collapse" data-target="#navbarSupportedContent">
                             <Icon icon={faEnvelope} /> {t('contactPage:title')}
                         </NavLink>
                     </li>
