@@ -13,7 +13,7 @@ class AuthController {
         try {
             const userData: CreateUserDto = req.body
             const userLocale = req.cookies.language || locale
-            const {cookie, createdUser} = await this.authService.signup(userData, userLocale)
+            const { cookie, createdUser } = await this.authService.signup(userData, userLocale)
 
             res.setHeader('Set-Cookie', [cookie])
             res.status(201).json({ data: createdUser, message: 'signup' })

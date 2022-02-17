@@ -39,7 +39,7 @@ const getMyOrgs = async (req: RequestWithUser, res: Response, next: NextFunction
 
 const updateOrganization = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const organizationId = require('mongodb').ObjectId(req.params.organizationId)
+        const organizationId = req.params.organizationId
         const organizationData = req.body
         const updatedOrganization: Organization = await updateOrgById(organizationId, organizationData)
         res.status(200).json({ data: updatedOrganization, message: 'updated' })
@@ -50,7 +50,7 @@ const updateOrganization = async (req: Request, res: Response, next: NextFunctio
 
 const deleteOrganization = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const organizationId = require('mongodb').ObjectId(req.params.organizationId)
+        const organizationId = req.params.organizationId
         const deletedOrg: Organization = await deleteOrgById(organizationId)
         res.status(200).json({ data: deletedOrg, message: 'deleted' })
     } catch (error) {

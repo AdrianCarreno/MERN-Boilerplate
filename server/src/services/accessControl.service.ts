@@ -202,7 +202,7 @@ const updateRole = async (roleInfo: Role, locale: string = env.locale) => {
  * @param {*} roleId ID of the role to delete in DB
  * @returns PermissionRoles, the deleted permission role document
  */
-const deleteRole = async (roleId: ObjectId, locale: string = env.locale) => {
+const deleteRole = async (roleId: string, locale: string = env.locale) => {
     const deleted = await RoleModel.findByIdAndDelete(roleId)
     if (!deleted) throw new HttpException(409, __({ phrase: 'Role not found', locale }))
     await updateAccessControl()
@@ -221,7 +221,7 @@ const findAllRoles = async () => {
     return roles
 }
 
-const updateRoleById = async (roleId: Role, roleData: UpdateRoleDto, locale: string = env.locale) => {
+const updateRoleById = async (roleId: string, roleData: UpdateRoleDto, locale: string = env.locale) => {
     const updated = await RoleModel.findByIdAndUpdate(roleId, roleData, { new: true })
     if (!updated) throw new HttpException(404, __({ phrase: 'Role not found', locale }))
     await updateAccessControl()

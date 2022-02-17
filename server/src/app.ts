@@ -29,7 +29,9 @@ class App {
         this.env = config.env.environment
         this.locale = config.env.locale
 
-        this.connectToDatabase()
+        if (this.env !== 'test') {
+            this.connectToDatabase()
+        }
         this.initializeMiddlewares()
         this.initializeRoutes(routes)
         this.initializeSwagger()

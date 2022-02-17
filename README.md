@@ -7,6 +7,7 @@ This boilerplate was made as a template to a developer wanting to build an app u
 1. [What is MERN?](#what-is-mern)
 1. [Installation](#installation)
 1. [Usage](#usage)
+1. [Testing](#testing)
 1. [Translation](#translation)
 1. [License](#license)
 1. [Contributing](#contributing)
@@ -37,7 +38,6 @@ npm run update
 ```
 
 And it will update the root, then the server, resolve dependencies with vulnerabilities, and then do the same for the client. After running this command, the entire project should be up to date.
-
 
 [Go up](#table-of-contents)
 
@@ -86,6 +86,17 @@ npm run build
 ```
 
 [Go up](#table-of-contents)
+
+# Testing
+
+Before pushing any code to the repository, it is a good practice to run the tests. To run the tests, run the following command (it should take a while to complete the tests):
+
+```
+cd ./server
+npm test
+```
+
+If the `email` suite fails, it's probably because you don't have the proper credentials. Please set the proper credentials.
 
 # Translation
 

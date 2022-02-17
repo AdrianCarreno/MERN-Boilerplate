@@ -1,8 +1,6 @@
 import { __ } from 'i18n'
-import { ObjectId } from 'mongoose'
 import { env } from '@/configs'
 import { CreateOrgDto } from '@/dtos/organizations.dto'
-import { Organization } from '@/interfaces/roles.interface'
 import OrganizationModel from '@/models/organizations.model'
 import { HttpException } from '@/exceptions/HttpException'
 
@@ -16,7 +14,7 @@ const createOrganization = async (orgInfo: CreateOrgDto, locale: string = env.lo
     return newOrganization
 }
 
-const deleteOrgById = async (organizationId: ObjectId, locale: string = env.locale) => {
+const deleteOrgById = async (organizationId: string, locale: string = env.locale) => {
     const deleted = await OrganizationModel.findByIdAndDelete(organizationId)
     if (!deleted) throw new HttpException(404, __({ phrase: 'Oganization not found', locale }))
     return deleted
@@ -26,7 +24,7 @@ const getOrganizations = async () => {
     return organizations
 }
 
-const updateOrgById = async (organizationId: Organization, organizationData: object, locale: string = env.locale) => {
+const updateOrgById = async (organizationId: string, organizationData: object, locale: string = env.locale) => {
     const updated = await OrganizationModel.findByIdAndUpdate(organizationId, organizationData, { new: true })
     if (!updated) throw new HttpException(404, __({ phrase: 'Oganization not found', locale }))
     return updated

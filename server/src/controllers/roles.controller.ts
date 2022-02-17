@@ -6,7 +6,6 @@ import { Role } from '@/interfaces/roles.interface'
 
 const createRole = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-        /*  */
         const rolesMatchs = Object.keys(req.body.resources).every(key => {
             return Object.keys(req.role.resources).includes(key)
         })
@@ -63,7 +62,7 @@ const getMyRoles = async (req: RequestWithUser, res: Response, next: NextFunctio
 
 const updateRole = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-        const roleId = require('mongodb').ObjectId(req.params.roleId)
+        const roleId = req.params.roleId
         const roleData = req.body
         const updatedRole: Role = await AccessControlServices.updateRoleById(roleId, roleData)
         res.status(200).json({ data: updatedRole, message: 'updated' })
@@ -74,7 +73,7 @@ const updateRole = async (req: RequestWithUser, res: Response, next: NextFunctio
 
 const deleteRole = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
-        const roleId = require('mongodb').ObjectId(req.params.roleId)
+        const roleId = req.params.roleId
         const deletedRole: Role = await AccessControlServices.deleteRole(roleId)
         res.status(200).json({ data: deletedRole, message: 'deleted' })
     } catch (error) {
