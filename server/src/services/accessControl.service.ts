@@ -11,6 +11,7 @@ import { HttpException } from '@/exceptions/HttpException'
 import { superAdmin } from '@/configs/roles.config'
 import RoleModel from '@/models/roles.model'
 import { Organization, Role } from '@interfaces/roles.interface'
+import { isEmpty } from '@/utils/util'
 
 /*
     Documentation: https://www.npmjs.com/package/accesscontrol
@@ -229,23 +230,21 @@ const updateRoleById = async (roleId: string, roleData: UpdateRoleDto, locale: s
 }
 
 const createSuperAdmin = async (): Promise<User> => {
-    const findUser: User = await userModel.findOne({ email: process.env.EMAIL })
-
-    if (findUser) {
-        return
-    }
-
     const hashedPassword = await bcrypt.hash(process.env.PASSWORD, 10)
+    const user: User = await userModel.findOneAndUpdate(
+        { email: process.env.EMAIL },
+        {
+            $setOnInsert: {
+                firstName: process.env.FIRSTNAME,
+                ...(!isEmpty(process.env.LASTNAME) && { lastName: process.env.LASTNAME }),
+                email: process.env.EMAIL,
+                password: hashedPassword
+            }
+        },
+        { new: true, upsert: true }
+    )
 
-    const adminInfo = {
-        firstName: process.env.FIRSTNAME,
-        lastName: process.env.LASTNAME,
-        email: process.env.EMAIL
-    }
-
-    const createUserData: User = await userModel.create({ ...adminInfo, password: hashedPassword })
-
-    return createUserData
+    return user
 }
 
 export default {
