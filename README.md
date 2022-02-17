@@ -70,11 +70,24 @@ Some errors you could experience and possible solutions:
 
 Solution:
 
-```
+```bash
+
 npm install -g ts-node
 ```
 
 It will install the dependencies of ts-node to run the app.
+
+### Example .env
+
+In the enviroment file in the server folder add the following parameters:
+
+````text
+FIRSTNAME="Super"
+LASTNAME="Admin"
+EMAIL="superAdmin@email.com"
+PASSWORD="Yourpassword1"
+ROLES=[]
+````
 
 ## Publishing
 
