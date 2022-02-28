@@ -44,7 +44,9 @@ const initAccessControl = async () => {
         console.error(error)
     }
 }
-
+/**
+ * Allows to update access control
+ */
 const updateAccessControl = async () => {
     const roles = await RoleModel.find()
     const parsedRoles = {}
@@ -91,8 +93,10 @@ const check = (role: ObjectId, resource: string, type: string) => {
  * Allows to create a role with a name (should be a generic name to translate in frontend)
  * and a resources object that should follow the format example shown in models/permissionRole.js.
  * Uses function updateAccessControl to update the Access Control after the successful creation of the role
- * @param {*} role Generic name to use for the role (e.g. admin)
- * @param {*} resources Object with the resource type of access and attributes (e.g. { User: { 'create:any': ['*'], ... } })
+ * @param {*} roleInfo Information of the role to create
+ * @param {*} org Organization id associated with the role
+ * @param {*} rolesMatchs Boolean if the resources to add into the role are ok
+ * @param {*} locale
  * @returns PermissionRoles, the newly created permission role document
  */
 const createRole = async (
@@ -128,7 +132,15 @@ const createRole = async (
         }
     } else throw new HttpException(409, __({ phrase: 'You do not have permission to create that role', locale }))
 }
-
+/**
+ * Allows to create a role with a name (should be a generic name to translate in frontend)
+ * and a resources object that should follow the format example shown in models/permissionRole.js.
+ * Uses function updateAccessControl to update the Access Control after the successful creation of the role
+ * @param {*} roleInfo Information of the role to create
+ * @param {*} rolesMatchs Boolean if the resources to add into the role are ok
+ * @param {*} locale
+ * @returns PermissionRoles, the newly created permission role document
+ */
 const createGlobalRole = async (
     roleInfo: CreateRoleDto,
     rolesMatchs: boolean,
@@ -148,7 +160,13 @@ const createGlobalRole = async (
         }
     } else throw new HttpException(409, __({ phrase: 'You do not have permission to create that role', locale }))
 }
-
+/**
+ * Allows to create a role with a name (should be a generic name to translate in frontend)
+ * and a resources object that should follow the format example shown in models/permissionRole.js.
+ * Uses function updateAccessControl to update the Access Control after the successful creation of the role
+ * @param {*} roleInfo Information of the role to create
+ * @returns PermissionRoles, the newly created permission role document
+ */
 const createRoleAdmin = async (roleInfo: CreateRoleDto): Promise<Role> => {
     try {
         const findAdmin = await userModel.findOne({ email: process.env.EMAIL })
@@ -189,7 +207,11 @@ const updateSuperAdmin = async (roleId: ObjectId, newResources: object) => {
         throw new Error(error.message)
     }
 }
-
+/**
+ * Allows to update a role using id and new information
+ * @param  {Role} roleInfo Information to update
+ * @param  {string=env.locale} locale
+ */
 const updateRole = async (roleInfo: Role, locale: string = env.locale) => {
     const updated = await RoleModel.findByIdAndUpdate(roleInfo._id, { resources: roleInfo.resources }, { new: true })
     if (!updated) throw new HttpException(409, __({ phrase: 'Role not found', locale }))
@@ -209,26 +231,42 @@ const deleteRole = async (roleId: string, locale: string = env.locale) => {
     await updateAccessControl()
     return deleted
 }
-
-const findRolesByOrg = async (orgInfo: Organization) => {
+/**
+ * Search for all roles in an organization
+ * @param  {Organization} orgInfo information of the organiuzation to search
+ * @returns Array of roles
+ */
+const findRolesByOrg = async (orgInfo: Organization): Promise<Role[]> => {
     const roles: Role[] = await RoleModel.find({ organizationId: orgInfo })
 
     return roles
 }
-
-const findAllRoles = async () => {
+/**
+ * Find all roles in DB
+ * @returns Array of roles
+ */
+const findAllRoles = async (): Promise<Role[]> => {
     const roles: Role[] = await RoleModel.find().populate('organizationId')
 
     return roles
 }
-
-const updateRoleById = async (roleId: string, roleData: UpdateRoleDto, locale: string = env.locale) => {
+/**
+ * Updates a role
+ * @param  {string} roleId Id of the role to update
+ * @param  {UpdateRoleDto} roleData information to update
+ * @param  {string=env.locale} locale
+ * @returns Updated role
+ */
+const updateRoleById = async (roleId: string, roleData: UpdateRoleDto, locale: string = env.locale): Promise<Role> => {
     const updated = await RoleModel.findByIdAndUpdate(roleId, roleData, { new: true })
     if (!updated) throw new HttpException(404, __({ phrase: 'Role not found', locale }))
     await updateAccessControl()
     return updated
 }
-
+/**
+ * Creates an account to use as a super admin with .env
+ * @returns new user
+ */
 const createSuperAdmin = async (): Promise<User> => {
     const hashedPassword = await bcrypt.hash(process.env.PASSWORD, 10)
     const user: User = await userModel.findOneAndUpdate(

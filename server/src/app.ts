@@ -2,7 +2,7 @@ import compression from 'compression'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import config from './configs'
-import express from 'express'
+import express, { Router } from 'express'
 import helmet from 'helmet'
 import hpp from 'hpp'
 import morgan from 'morgan'
@@ -10,7 +10,6 @@ import { connect, set } from 'mongoose'
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 import { dbConnection } from '@databases'
-import { Routes } from '@interfaces/routes.interface'
 import errorMiddleware from '@middlewares/error.middleware'
 import { logger, stream } from '@utils/logger'
 import i18n from 'i18n'
@@ -23,7 +22,7 @@ class App {
     public env: string
     public locale: string
 
-    constructor(routes: Routes[]) {
+    constructor(routes: Router) {
         this.app = express()
         this.port = config.env.port
         this.env = config.env.environment
@@ -75,10 +74,8 @@ class App {
         this.app.use(i18n.init)
     }
 
-    private initializeRoutes(routes: Routes[]) {
-        routes.forEach(route => {
-            this.app.use('/', route.router)
-        })
+    private initializeRoutes(routes: Router) {
+        this.app.use('/', routes)
     }
 
     private initializeSwagger() {

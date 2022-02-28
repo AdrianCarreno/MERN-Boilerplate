@@ -1,3 +1,4 @@
+import { Organization } from '@/interfaces/roles.interface'
 import { model, Schema } from 'mongoose'
 
 const organizationSchema = new Schema(
@@ -16,6 +17,6 @@ const organizationSchema = new Schema(
     }
 )
 
-const organizationModel = model('Organization', organizationSchema)
+const organizationModel = model<Organization & Document>('Organization', organizationSchema)
 
 export default organizationModel

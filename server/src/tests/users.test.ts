@@ -3,11 +3,11 @@ import mongoose from 'mongoose'
 import request from 'supertest'
 import App from '@/app'
 import { addRoleDto, CreateUserDto, LoginUserDto } from '@dtos/users.dto'
-import UsersRoute from '@routes/users.route'
-import AuthRoute from '@/routes/auth.route'
 import roleModel from '@/models/roles.model'
 import organizationModel from '@/models/organizations.model'
 import { logger } from '@/utils/logger'
+import routes from '@routes/index'
+import userModel from '@/models/users.model'
 
 afterAll(async () => {
     await new Promise<void>(resolve => setTimeout(() => resolve(), 500))
@@ -61,14 +61,17 @@ const roleTest = [
     }
 ]
 
+const AuthPath = '/'
+const UserPath = '/api/users'
+const app = new App(routes)
+
 describe('Testing Users with Login (SuperAdmin)', () => {
     beforeAll(async () => {
         const userData: LoginUserDto = {
             email: 'test@yopmail.com',
             password: 'Yourpassword1'
         }
-        const authRoute = new AuthRoute()
-        const users = authRoute.authController.authService.users
+        const users = userModel
         // find user and populate
         users.findById = jest
             .fn()
@@ -89,10 +92,9 @@ describe('Testing Users with Login (SuperAdmin)', () => {
             roles: ['61f7f6b2e299444350796a6e']
         })
         ;(mongoose as any).connect = jest.fn()
-        const app = new App([authRoute])
         // login plus save token
         return request(app.getServer())
-            .post(`${authRoute.path}login`)
+            .post(`${AuthPath}login`)
             .send(userData)
             .expect('Set-Cookie', /^Authorization=.+/)
             .then(response => {
@@ -103,9 +105,7 @@ describe('Testing Users with Login (SuperAdmin)', () => {
     describe('[GET] /users/user/:id', () => {
         it('response findOne User', async () => {
             const userId = '61f7f6b2e299444350796a6a'
-            const usersRoute = new UsersRoute()
-            const users = usersRoute.usersController.userService.users
-
+            const users = userModel
             users.findOne = jest
                 .fn()
                 .mockReturnValue({
@@ -124,9 +124,8 @@ describe('Testing Users with Login (SuperAdmin)', () => {
                     })
                 }))
             ;(mongoose as any).connect = jest.fn()
-            const app = new App([usersRoute])
             return await request(app.getServer())
-                .get(`${usersRoute.path}/user/${userId}`)
+                .get(`${UserPath}/user/${userId}`)
                 .set('Authorization', `Bearer ${token}`)
                 .expect(200)
         })
@@ -134,9 +133,7 @@ describe('Testing Users with Login (SuperAdmin)', () => {
 
     describe('[GET] /users/', () => {
         it('response findOne User', async () => {
-            const usersRoute = new UsersRoute()
-            const users = usersRoute.usersController.userService.users
-
+            const users = userModel
             users.findOne = jest
                 .fn()
                 .mockReturnValue({
@@ -155,9 +152,8 @@ describe('Testing Users with Login (SuperAdmin)', () => {
                     })
                 }))
             ;(mongoose as any).connect = jest.fn()
-            const app = new App([usersRoute])
             return await request(app.getServer())
-                .get(`${usersRoute.path}/`)
+                .get(`${UserPath}/`)
                 .set('Authorization', `Bearer ${token}`)
                 .expect(200)
         })
@@ -165,9 +161,7 @@ describe('Testing Users with Login (SuperAdmin)', () => {
 
     describe('[GET] /users/getUsers', () => {
         it('response findAll Users', async () => {
-            const usersRoute = new UsersRoute()
-            const users = usersRoute.usersController.userService.users
-
+            const users = userModel
             users.find = jest
                 .fn()
                 .mockReturnValue({
@@ -188,9 +182,8 @@ describe('Testing Users with Login (SuperAdmin)', () => {
                     ])
                 }))
             ;(mongoose as any).connect = jest.fn()
-            const app = new App([usersRoute])
             return await request(app.getServer())
-                .get(`${usersRoute.path}/getUsers`)
+                .get(`${UserPath}/getUsers`)
                 .set('Authorization', `Bearer ${token}`)
                 .expect(200)
         })
@@ -200,8 +193,7 @@ describe('Testing Users with Login (SuperAdmin)', () => {
         it('response findOne User', async () => {
             const userId = '61f7fa45ff48d95f2ca50dba'
             const organizationId = '61f7f6c6e299444350796a75'
-            const usersRoute = new UsersRoute()
-            const users = usersRoute.usersController.userService.users
+            const users = userModel
             organizationModel.findById = jest.fn().mockReturnValue({
                 _id: '61f7f6c6e299444350796a75',
                 name: 'Organization test',
@@ -233,9 +225,8 @@ describe('Testing Users with Login (SuperAdmin)', () => {
                     })
                 }))
             ;(mongoose as any).connect = jest.fn()
-            const app = new App([usersRoute])
             return await request(app.getServer())
-                .get(`${usersRoute.path}/organization/${organizationId}/user/${userId}`)
+                .get(`${UserPath}/organization/${organizationId}/user/${userId}`)
                 .set('Authorization', `Bearer ${token}`)
                 .expect(200)
         })
@@ -244,8 +235,8 @@ describe('Testing Users with Login (SuperAdmin)', () => {
     describe('[GET] /users/organization/:organizationId', () => {
         it('response find Users', async () => {
             const organizationId = '61f7f6c6e299444350796a75'
-            const usersRoute = new UsersRoute()
-            const users = usersRoute.usersController.userService.users
+
+            const users = userModel
             organizationModel.findById = jest.fn().mockReturnValue({
                 _id: '61f7f6c6e299444350796a75',
                 name: 'Organization test',
@@ -279,9 +270,8 @@ describe('Testing Users with Login (SuperAdmin)', () => {
                 }))
             ;(mongoose as any).connect = jest.fn()
 
-            const app = new App([usersRoute])
             return await request(app.getServer())
-                .get(`${usersRoute.path}/organization/${organizationId}`)
+                .get(`${UserPath}/organization/${organizationId}`)
                 .set('Authorization', `Bearer ${token}`)
                 .expect(200)
         })
@@ -298,8 +288,7 @@ describe('Testing Users with Login (SuperAdmin)', () => {
                 roles: ['61f7f6b2e299444350796a6e']
             }
 
-            const usersRoute = new UsersRoute()
-            const users = usersRoute.usersController.userService.users
+            const users = userModel
             if (userData.email) {
                 users.findOne = jest.fn().mockReturnValue({
                     _id: userId,
@@ -315,9 +304,9 @@ describe('Testing Users with Login (SuperAdmin)', () => {
                 password: await bcrypt.hash(userData.password, 10)
             })
             ;(mongoose as any).connect = jest.fn()
-            const app = new App([usersRoute])
+
             return request(app.getServer())
-                .put(`${usersRoute.path}/user/${userId}`)
+                .put(`${UserPath}/user/${userId}`)
                 .send(userData)
                 .set('Authorization', `Bearer ${token}`)
                 .expect(200)
@@ -339,8 +328,8 @@ describe('Testing Users with Login (SuperAdmin)', () => {
             })
             ;(mongoose as any).connect = jest.fn()
             // Authorization check
-            const usersRoute = new UsersRoute()
-            const users = usersRoute.usersController.userService.users
+
+            const users = userModel
             users.findById = jest
                 .fn()
                 .mockReturnValue({
@@ -374,9 +363,8 @@ describe('Testing Users with Login (SuperAdmin)', () => {
             })
             ;(mongoose as any).connect = jest.fn()
 
-            const app = new App([usersRoute])
             return request(app.getServer())
-                .put(`${usersRoute.path}/addRole/user/${userId}`)
+                .put(`${UserPath}/addRole/user/${userId}`)
                 .send(userData)
                 .set('Authorization', `Bearer ${token}`)
                 .expect(200)
@@ -398,8 +386,7 @@ describe('Testing Users with Login (SuperAdmin)', () => {
             })
             ;(mongoose as any).connect = jest.fn()
 
-            const usersRoute = new UsersRoute()
-            const users = usersRoute.usersController.userService.users
+            const users = userModel
             // Authorization check
             users.findById = jest
                 .fn()
@@ -436,9 +423,9 @@ describe('Testing Users with Login (SuperAdmin)', () => {
                 roles: ['61f7f6b2e299444350796a6e']
             })
             ;(mongoose as any).connect = jest.fn()
-            const app = new App([usersRoute])
+
             return request(app.getServer())
-                .put(`${usersRoute.path}/removeRole/user/${userId}`)
+                .put(`${UserPath}/removeRole/user/${userId}`)
                 .send(userData)
                 .set('Authorization', `Bearer ${token}`)
                 .expect(200)
@@ -449,8 +436,7 @@ describe('Testing Users with Login (SuperAdmin)', () => {
         it('response Delete User', async () => {
             const userId = '61f7f6b2e299444350796a6a'
 
-            const usersRoute = new UsersRoute()
-            const users = usersRoute.usersController.userService.users
+            const users = userModel
 
             users.findByIdAndDelete = jest.fn().mockReturnValue({
                 _id: userId,
@@ -460,9 +446,9 @@ describe('Testing Users with Login (SuperAdmin)', () => {
                 password: await bcrypt.hash('Yourpassword1', 10)
             })
             ;(mongoose as any).connect = jest.fn()
-            const app = new App([usersRoute])
+
             return request(app.getServer())
-                .delete(`${usersRoute.path}/user/${userId}`)
+                .delete(`${UserPath}/user/${userId}`)
                 .set('Authorization', `Bearer ${token}`)
                 .expect(200)
         })
@@ -473,27 +459,20 @@ describe('Testing Users Without Login', () => {
     describe('[GET] /users/user/:id', () => {
         it('response Wrong authentication token', async () => {
             const userId = '61f7f6b2e299444350796a6a'
-            const usersRoute = new UsersRoute()
-            const app = new App([usersRoute])
-            return await request(app.getServer()).get(`${usersRoute.path}/user/${userId}`).expect(401)
+
+            return await request(app.getServer()).get(`${UserPath}/user/${userId}`).expect(401)
         })
     })
 
     describe('[GET] /users/', () => {
         it('response Wrong authentication token', async () => {
-            const usersRoute = new UsersRoute()
-
-            const app = new App([usersRoute])
-            return await request(app.getServer()).get(`${usersRoute.path}/`).expect(401)
+            return await request(app.getServer()).get(`${UserPath}/`).expect(401)
         })
     })
 
     describe('[GET] /users/getUsers', () => {
         it('response Wrong authentication token', async () => {
-            const usersRoute = new UsersRoute()
-
-            const app = new App([usersRoute])
-            return await request(app.getServer()).get(`${usersRoute.path}/getUsers`).expect(401)
+            return await request(app.getServer()).get(`${UserPath}/getUsers`).expect(401)
         })
     })
 
@@ -501,10 +480,9 @@ describe('Testing Users Without Login', () => {
         it('response Wrong authentication token', async () => {
             const userId = '61f7fa45ff48d95f2ca50dba'
             const organizationId = '61f7f6c6e299444350796a75'
-            const usersRoute = new UsersRoute()
-            const app = new App([usersRoute])
+
             return await request(app.getServer())
-                .get(`${usersRoute.path}/organization/${organizationId}/user/${userId}`)
+                .get(`${UserPath}/organization/${organizationId}/user/${userId}`)
                 .expect(401)
         })
     })
@@ -512,9 +490,8 @@ describe('Testing Users Without Login', () => {
     describe('[GET] /users/organization/:organizationId', () => {
         it('response Wrong authentication token', async () => {
             const organizationId = '61f7f6c6e299444350796a75'
-            const usersRoute = new UsersRoute()
-            const app = new App([usersRoute])
-            return await request(app.getServer()).get(`${usersRoute.path}/organization/${organizationId}`).expect(401)
+
+            return await request(app.getServer()).get(`${UserPath}/organization/${organizationId}`).expect(401)
         })
     })
 
@@ -529,9 +506,7 @@ describe('Testing Users Without Login', () => {
                 roles: ['61f7f6b2e299444350796a6e']
             }
 
-            const usersRoute = new UsersRoute()
-            const app = new App([usersRoute])
-            return request(app.getServer()).put(`${usersRoute.path}/user/${userId}`).send(userData).expect(401)
+            return request(app.getServer()).put(`${UserPath}/user/${userId}`).send(userData).expect(401)
         })
     })
 
@@ -541,9 +516,8 @@ describe('Testing Users Without Login', () => {
             const userData: addRoleDto = {
                 _id: '61f7f6b2e299444350796a6c'
             }
-            const usersRoute = new UsersRoute()
-            const app = new App([usersRoute])
-            return request(app.getServer()).put(`${usersRoute.path}/addRole/user/${userId}`).send(userData).expect(401)
+
+            return request(app.getServer()).put(`${UserPath}/addRole/user/${userId}`).send(userData).expect(401)
         })
     })
 
@@ -553,21 +527,16 @@ describe('Testing Users Without Login', () => {
             const userData: addRoleDto = {
                 _id: '61f7f6b2e299444350796a6c'
             }
-            const usersRoute = new UsersRoute()
-            const app = new App([usersRoute])
-            return request(app.getServer())
-                .put(`${usersRoute.path}/removeRole/user/${userId}`)
-                .send(userData)
-                .expect(401)
+
+            return request(app.getServer()).put(`${UserPath}/removeRole/user/${userId}`).send(userData).expect(401)
         })
     })
 
     describe('[DELETE] /users/user/:id', () => {
         it('response Wrong authentication token', async () => {
             const userId = '61f7f6b2e299444350796a6a'
-            const usersRoute = new UsersRoute()
-            const app = new App([usersRoute])
-            return request(app.getServer()).delete(`${usersRoute.path}/user/${userId}`).expect(401)
+
+            return request(app.getServer()).delete(`${UserPath}/user/${userId}`).expect(401)
         })
     })
 })
@@ -578,8 +547,7 @@ describe('Testing Users with Login without permission', () => {
             email: 'test@yopmail.com',
             password: 'Yourpassword1'
         }
-        const authRoute = new AuthRoute()
-        const users = authRoute.authController.authService.users
+        const users = userModel
         // find user and populate
         users.findById = jest
             .fn()
@@ -600,10 +568,9 @@ describe('Testing Users with Login without permission', () => {
             roles: []
         })
         ;(mongoose as any).connect = jest.fn()
-        const app = new App([authRoute])
         // login plus save token
         return request(app.getServer())
-            .post(`${authRoute.path}login`)
+            .post(`${AuthPath}login`)
             .send(userData)
             .expect('Set-Cookie', /^Authorization=.+/)
             .then(response => {
@@ -613,10 +580,9 @@ describe('Testing Users with Login without permission', () => {
     describe('[GET] /users/user/:id', () => {
         it('response You do not have enough permission to perform this action', async () => {
             const userId = '61f7f6b2e299444350796a6a'
-            const usersRoute = new UsersRoute()
-            const app = new App([usersRoute])
+
             return await request(app.getServer())
-                .get(`${usersRoute.path}/user/${userId}`)
+                .get(`${UserPath}/user/${userId}`)
                 .set('Authorization', `Bearer ${tokenWithOutPermission}`)
                 .expect(401)
         })
@@ -624,8 +590,7 @@ describe('Testing Users with Login without permission', () => {
 
     describe('[GET] /users/', () => {
         it('response find user information by header', async () => {
-            const usersRoute = new UsersRoute()
-            const users = usersRoute.usersController.userService.users
+            const users = userModel
             users.findOne = jest
                 .fn()
                 .mockReturnValue({
@@ -644,9 +609,9 @@ describe('Testing Users with Login without permission', () => {
                     })
                 }))
             ;(mongoose as any).connect = jest.fn()
-            const app = new App([usersRoute])
+
             return await request(app.getServer())
-                .get(`${usersRoute.path}/`)
+                .get(`${UserPath}/`)
                 .set('Authorization', `Bearer ${tokenWithOutPermission}`)
                 .expect(200)
         })
@@ -654,11 +619,8 @@ describe('Testing Users with Login without permission', () => {
 
     describe('[GET] /users/getUsers', () => {
         it('response You do not have enough permission to perform this action', async () => {
-            const usersRoute = new UsersRoute()
-
-            const app = new App([usersRoute])
             return await request(app.getServer())
-                .get(`${usersRoute.path}/getUsers`)
+                .get(`${UserPath}/getUsers`)
                 .set('Authorization', `Bearer ${tokenWithOutPermission}`)
                 .expect(401)
         })
@@ -668,10 +630,9 @@ describe('Testing Users with Login without permission', () => {
         it('response You do not have enough permission to perform this action', async () => {
             const userId = '61f7fa45ff48d95f2ca50dba'
             const organizationId = '61f7f6c6e299444350796a75'
-            const usersRoute = new UsersRoute()
-            const app = new App([usersRoute])
+
             return await request(app.getServer())
-                .get(`${usersRoute.path}/organization/${organizationId}/user/${userId}`)
+                .get(`${UserPath}/organization/${organizationId}/user/${userId}`)
                 .set('Authorization', `Bearer ${tokenWithOutPermission}`)
                 .expect(401)
         })
@@ -680,10 +641,9 @@ describe('Testing Users with Login without permission', () => {
     describe('[GET] /users/organization/:organizationId', () => {
         it('response You do not have enough permission to perform this action', async () => {
             const organizationId = '61f7f6c6e299444350796a75'
-            const usersRoute = new UsersRoute()
-            const app = new App([usersRoute])
+
             return await request(app.getServer())
-                .get(`${usersRoute.path}/organization/${organizationId}`)
+                .get(`${UserPath}/organization/${organizationId}`)
                 .set('Authorization', `Bearer ${tokenWithOutPermission}`)
                 .expect(401)
         })
@@ -700,10 +660,8 @@ describe('Testing Users with Login without permission', () => {
                 roles: ['61f7f6b2e299444350796a6e']
             }
 
-            const usersRoute = new UsersRoute()
-            const app = new App([usersRoute])
             return request(app.getServer())
-                .put(`${usersRoute.path}/user/${userId}`)
+                .put(`${UserPath}/user/${userId}`)
                 .set('Authorization', `Bearer ${tokenWithOutPermission}`)
                 .send(userData)
                 .expect(401)
@@ -716,10 +674,9 @@ describe('Testing Users with Login without permission', () => {
             const userData: addRoleDto = {
                 _id: '61f7f6b2e299444350796a6c'
             }
-            const usersRoute = new UsersRoute()
-            const app = new App([usersRoute])
+
             return request(app.getServer())
-                .put(`${usersRoute.path}/addRole/user/${userId}`)
+                .put(`${UserPath}/addRole/user/${userId}`)
                 .set('Authorization', `Bearer ${tokenWithOutPermission}`)
                 .send(userData)
                 .expect(401)
@@ -732,10 +689,9 @@ describe('Testing Users with Login without permission', () => {
             const userData: addRoleDto = {
                 _id: '61f7f6b2e299444350796a6c'
             }
-            const usersRoute = new UsersRoute()
-            const app = new App([usersRoute])
+
             return request(app.getServer())
-                .put(`${usersRoute.path}/removeRole/user/${userId}`)
+                .put(`${UserPath}/removeRole/user/${userId}`)
                 .send(userData)
                 .set('Authorization', `Bearer ${tokenWithOutPermission}`)
                 .expect(401)
@@ -745,10 +701,9 @@ describe('Testing Users with Login without permission', () => {
     describe('[DELETE] /users/user/:id', () => {
         it('response You do not have enough permission to perform this action', async () => {
             const userId = '61f7f6b2e299444350796a6a'
-            const usersRoute = new UsersRoute()
-            const app = new App([usersRoute])
+
             return request(app.getServer())
-                .delete(`${usersRoute.path}/user/${userId}`)
+                .delete(`${UserPath}/user/${userId}`)
                 .set('Authorization', `Bearer ${tokenWithOutPermission}`)
                 .expect(401)
         })

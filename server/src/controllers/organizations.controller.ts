@@ -3,7 +3,12 @@ import { RequestWithUser } from '@/interfaces/auth.interface'
 import { Organization } from '@/interfaces/roles.interface'
 import { createOrganization, deleteOrgById, getOrganizations, updateOrgById } from '@/services/organization.service'
 import { NextFunction, Request, Response } from 'express'
-
+/**
+ * Creates a new organization
+ * @param  {Request} req http request arguments
+ * @param  {Response} res http response arguments
+ * @param  {NextFunction} next next matching route
+ */
 const createOrg = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const orgInfo: CreateOrgDto = req.body
@@ -13,7 +18,12 @@ const createOrg = async (req: Request, res: Response, next: NextFunction) => {
         next(error)
     }
 }
-
+/**
+ * Get all existing organizations in the database
+ * @param  {Request} req http request arguments
+ * @param  {Response} res http response arguments
+ * @param  {NextFunction} next next matching route
+ */
 const getAllOrgs = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const findAllOrgs: Organization[] = await getOrganizations()
@@ -22,7 +32,12 @@ const getAllOrgs = async (req: Request, res: Response, next: NextFunction) => {
         next(error)
     }
 }
-
+/**
+ * Get the organizations of a user
+ * @param  {Request} req http request arguments
+ * @param  {Response} res http response arguments
+ * @param  {NextFunction} next next matching route
+ */
 const getMyOrgs = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
         let findAllOrgs = req.user.roles.map(role => {
@@ -36,7 +51,12 @@ const getMyOrgs = async (req: RequestWithUser, res: Response, next: NextFunction
         next(error)
     }
 }
-
+/**
+ * Updates an organization
+ * @param  {Request} req http request arguments
+ * @param  {Response} res http response arguments
+ * @param  {NextFunction} next next matching route
+ */
 const updateOrganization = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const organizationId = req.params.organizationId
@@ -47,7 +67,12 @@ const updateOrganization = async (req: Request, res: Response, next: NextFunctio
         next(error)
     }
 }
-
+/**
+ * Deletes an organization
+ * @param  {Request} req http request arguments
+ * @param  {Response} res http response arguments
+ * @param  {NextFunction} next next matching route
+ */
 const deleteOrganization = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const organizationId = req.params.organizationId
@@ -58,4 +83,4 @@ const deleteOrganization = async (req: Request, res: Response, next: NextFunctio
     }
 }
 
-export { createOrg, getAllOrgs, updateOrganization, deleteOrganization, getMyOrgs }
+export default { createOrg, getAllOrgs, updateOrganization, deleteOrganization, getMyOrgs }

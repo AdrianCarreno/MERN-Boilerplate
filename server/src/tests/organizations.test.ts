@@ -3,11 +3,11 @@ import mongoose from 'mongoose'
 import request from 'supertest'
 import App from '@/app'
 import { LoginUserDto } from '@dtos/users.dto'
-import AuthRoute from '@/routes/auth.route'
-import OrganizationsRoute from '@/routes/organizations.route'
 import { CreateOrgDto, UpdateOrgDto } from '@/dtos/organizations.dto'
 import organizationModel from '@/models/organizations.model'
 import { logger } from '@/utils/logger'
+import userModel from '@/models/users.model'
+import routes from '@routes/index'
 
 afterAll(async () => {
     await new Promise<void>(resolve => setTimeout(() => resolve(), 500))
@@ -88,6 +88,9 @@ const roleTest2 = [
 ]
 
 const concatRoles = [...roleTest, ...roleTest2]
+const AuthPath = '/'
+const OrgPath = '/api/organizations'
+const app = new App(routes)
 
 describe('Testing Users with Login (SuperAdmin)', () => {
     beforeAll(async () => {
@@ -95,8 +98,7 @@ describe('Testing Users with Login (SuperAdmin)', () => {
             email: 'test@yopmail.com',
             password: 'Yourpassword1'
         }
-        const authRoute = new AuthRoute()
-        const users = authRoute.authController.authService.users
+        const users = userModel
         // find user and populate
         users.findById = jest
             .fn()
@@ -117,10 +119,10 @@ describe('Testing Users with Login (SuperAdmin)', () => {
             roles: ['61f7f6b2e299444350796a6e']
         })
         ;(mongoose as any).connect = jest.fn()
-        const app = new App([authRoute])
+
         // login plus save token
         return request(app.getServer())
-            .post(`${authRoute.path}login`)
+            .post(`${AuthPath}login`)
             .send(userData)
             .expect('Set-Cookie', /^Authorization=.+/)
             .then(response => {
@@ -130,8 +132,6 @@ describe('Testing Users with Login (SuperAdmin)', () => {
 
     describe('[Post] /organizations/createOrg', () => {
         it('response create organization', async () => {
-            const orgRoute = new OrganizationsRoute()
-            const app = new App([orgRoute])
             const orgData: CreateOrgDto = {
                 name: 'OrganizationTest',
                 description: 'Description Test'
@@ -145,7 +145,7 @@ describe('Testing Users with Login (SuperAdmin)', () => {
             })
             ;(mongoose as any).connect = jest.fn()
             return request(app.getServer())
-                .post(`${orgRoute.path}/createOrg`)
+                .post(`${OrgPath}/createOrg`)
                 .send(orgData)
                 .set('Authorization', `Bearer ${token}`)
                 .expect(201)
@@ -154,8 +154,6 @@ describe('Testing Users with Login (SuperAdmin)', () => {
 
     describe('[PUT] /organizations/update/organization/:organizationId', () => {
         it('response Update Organization', async () => {
-            const orgRoute = new OrganizationsRoute()
-            const app = new App([orgRoute])
             const organizationId = '61f7f6c6e299444350796a75'
             const orgData: UpdateOrgDto = {
                 name: 'OrganizationTest',
@@ -170,7 +168,7 @@ describe('Testing Users with Login (SuperAdmin)', () => {
             ;(mongoose as any).connect = jest.fn()
 
             return request(app.getServer())
-                .put(`${orgRoute.path}/update/organization/${organizationId}`)
+                .put(`${OrgPath}/update/organization/${organizationId}`)
                 .send(orgData)
                 .set('Authorization', `Bearer ${token}`)
                 .expect(200)
@@ -179,9 +177,6 @@ describe('Testing Users with Login (SuperAdmin)', () => {
 
     describe('[GET] /organizations/getOrganizations', () => {
         it('response findAll Organizations', async () => {
-            const orgRoute = new OrganizationsRoute()
-            const app = new App([orgRoute])
-
             organizationModel.find = jest.fn().mockReturnValue([
                 {
                     name: 'OrganizationTest',
@@ -195,7 +190,7 @@ describe('Testing Users with Login (SuperAdmin)', () => {
             ;(mongoose as any).connect = jest.fn()
 
             return request(app.getServer())
-                .get(`${orgRoute.path}/getOrganizations`)
+                .get(`${OrgPath}/getOrganizations`)
                 .set('Authorization', `Bearer ${token}`)
                 .expect(200)
         })
@@ -203,11 +198,8 @@ describe('Testing Users with Login (SuperAdmin)', () => {
 
     describe('[GET] /organizations/getMyOrganizations', () => {
         it('response find organizations by header', async () => {
-            const orgRoute = new OrganizationsRoute()
-            const app = new App([orgRoute])
-
             return request(app.getServer())
-                .get(`${orgRoute.path}/getMyOrganizations`)
+                .get(`${OrgPath}/getMyOrganizations`)
                 .set('Authorization', `Bearer ${token}`)
                 .expect(200)
         })
@@ -215,8 +207,6 @@ describe('Testing Users with Login (SuperAdmin)', () => {
 
     describe('[DELETE] /organizations/delete/organization/:organizationId', () => {
         it('response deleted organization', async () => {
-            const orgRoute = new OrganizationsRoute()
-            const app = new App([orgRoute])
             const organizationId = '61f7f6c6e299444350796a75'
 
             organizationModel.findByIdAndDelete = jest.fn().mockReturnValue({
@@ -227,7 +217,7 @@ describe('Testing Users with Login (SuperAdmin)', () => {
             ;(mongoose as any).connect = jest.fn()
 
             return request(app.getServer())
-                .delete(`${orgRoute.path}/delete/organization/${organizationId}`)
+                .delete(`${OrgPath}/delete/organization/${organizationId}`)
                 .set('Authorization', `Bearer ${token}`)
                 .expect(200)
         })
@@ -237,28 +227,24 @@ describe('Testing Users with Login (SuperAdmin)', () => {
 describe('Testing Users without Login', () => {
     describe('[Post] /organizations/createOrg', () => {
         it('response Wrong authentication token', async () => {
-            const orgRoute = new OrganizationsRoute()
-            const app = new App([orgRoute])
             const orgData: CreateOrgDto = {
                 name: 'OrganizationTest',
                 description: 'Description Test'
             }
 
-            return request(app.getServer()).post(`${orgRoute.path}/createOrg`).send(orgData).expect(401)
+            return request(app.getServer()).post(`${OrgPath}/createOrg`).send(orgData).expect(401)
         })
     })
 
     describe('[PUT] /organizations/update/organization/:organizationId', () => {
         it('response Wrong authentication token', async () => {
-            const orgRoute = new OrganizationsRoute()
-            const app = new App([orgRoute])
             const organizationId = '61f7f6c6e299444350796a75'
             const orgData: UpdateOrgDto = {
                 name: 'OrganizationTest',
                 description: 'Description Test'
             }
             return request(app.getServer())
-                .put(`${orgRoute.path}/update/organization/${organizationId}`)
+                .put(`${OrgPath}/update/organization/${organizationId}`)
                 .send(orgData)
                 .expect(401)
         })
@@ -266,28 +252,20 @@ describe('Testing Users without Login', () => {
 
     describe('[GET] /organizations/getOrganizations', () => {
         it('response Wrong authentication token', async () => {
-            const orgRoute = new OrganizationsRoute()
-            const app = new App([orgRoute])
-            return request(app.getServer()).get(`${orgRoute.path}/getOrganizations`).expect(401)
+            return request(app.getServer()).get(`${OrgPath}/getOrganizations`).expect(401)
         })
     })
 
     describe('[GET] /organizations/getMyOrganizations', () => {
         it('response Wrong authentication token', async () => {
-            const orgRoute = new OrganizationsRoute()
-            const app = new App([orgRoute])
-
-            return request(app.getServer()).get(`${orgRoute.path}/getMyOrganizations`).expect(401)
+            return request(app.getServer()).get(`${OrgPath}/getMyOrganizations`).expect(401)
         })
     })
 
     describe('[DELETE] /organizations/delete/organization/:organizationId', () => {
         it('response Wrong authentication token', async () => {
-            const orgRoute = new OrganizationsRoute()
-            const app = new App([orgRoute])
             const organizationId = '61f7f6c6e299444350796a75'
-
-            return request(app.getServer()).delete(`${orgRoute.path}/delete/organization/${organizationId}`).expect(401)
+            return request(app.getServer()).delete(`${OrgPath}/delete/organization/${organizationId}`).expect(401)
         })
     })
 })
@@ -298,8 +276,7 @@ describe('Testing Users with Login without permission', () => {
             email: 'test@yopmail.com',
             password: 'Yourpassword1'
         }
-        const authRoute = new AuthRoute()
-        const users = authRoute.authController.authService.users
+        const users = userModel
         // find user and populate
         users.findById = jest
             .fn()
@@ -320,10 +297,9 @@ describe('Testing Users with Login without permission', () => {
             roles: ['']
         })
         ;(mongoose as any).connect = jest.fn()
-        const app = new App([authRoute])
         // login plus save token
         return request(app.getServer())
-            .post(`${authRoute.path}login`)
+            .post(`${AuthPath}login`)
             .send(userData)
             .expect('Set-Cookie', /^Authorization=.+/)
             .then(response => {
@@ -333,15 +309,13 @@ describe('Testing Users with Login without permission', () => {
 
     describe('[Post] /organizations/createOrg', () => {
         it('response ', async () => {
-            const orgRoute = new OrganizationsRoute()
-            const app = new App([orgRoute])
             const orgData: CreateOrgDto = {
                 name: 'OrganizationTest',
                 description: 'Description Test'
             }
 
             return request(app.getServer())
-                .post(`${orgRoute.path}/createOrg`)
+                .post(`${OrgPath}/createOrg`)
                 .send(orgData)
                 .set('Authorization', `Bearer ${tokenWithOutPermission}`)
                 .expect(401)
@@ -350,15 +324,13 @@ describe('Testing Users with Login without permission', () => {
 
     describe('[PUT] /organizations/update/organization/:organizationId', () => {
         it('response You do not have enough permission to perform this action', async () => {
-            const orgRoute = new OrganizationsRoute()
-            const app = new App([orgRoute])
             const organizationId = '61f7f6c6e299444350796a75'
             const orgData: UpdateOrgDto = {
                 name: 'OrganizationTest',
                 description: 'Description Test'
             }
             return request(app.getServer())
-                .put(`${orgRoute.path}/update/organization/${organizationId}`)
+                .put(`${OrgPath}/update/organization/${organizationId}`)
                 .send(orgData)
                 .set('Authorization', `Bearer ${tokenWithOutPermission}`)
                 .expect(401)
@@ -367,10 +339,8 @@ describe('Testing Users with Login without permission', () => {
 
     describe('[GET] /organizations/getOrganizations', () => {
         it('response You do not have enough permission to perform this action', async () => {
-            const orgRoute = new OrganizationsRoute()
-            const app = new App([orgRoute])
             return request(app.getServer())
-                .get(`${orgRoute.path}/getOrganizations`)
+                .get(`${OrgPath}/getOrganizations`)
                 .set('Authorization', `Bearer ${tokenWithOutPermission}`)
                 .expect(401)
         })
@@ -378,11 +348,8 @@ describe('Testing Users with Login without permission', () => {
 
     describe('[GET] /organizations/getMyOrganizations', () => {
         it('response find organizations by header', async () => {
-            const orgRoute = new OrganizationsRoute()
-            const app = new App([orgRoute])
-
             return request(app.getServer())
-                .get(`${orgRoute.path}/getMyOrganizations`)
+                .get(`${OrgPath}/getMyOrganizations`)
                 .set('Authorization', `Bearer ${tokenWithOutPermission}`)
                 .expect(200)
         })
@@ -390,12 +357,9 @@ describe('Testing Users with Login without permission', () => {
 
     describe('[DELETE] /organizations/delete/organization/:organizationId', () => {
         it('response You do not have enough permission to perform this action', async () => {
-            const orgRoute = new OrganizationsRoute()
-            const app = new App([orgRoute])
             const organizationId = '61f7f6c6e299444350796a75'
-
             return request(app.getServer())
-                .delete(`${orgRoute.path}/delete/organization/${organizationId}`)
+                .delete(`${OrgPath}/delete/organization/${organizationId}`)
                 .set('Authorization', `Bearer ${tokenWithOutPermission}`)
                 .expect(401)
         })

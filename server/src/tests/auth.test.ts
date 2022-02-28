@@ -4,10 +4,13 @@ import request from 'supertest'
 import App from '@/app'
 import { CreateUserDto, LoginUserDto } from '@dtos/users.dto'
 import AuthRoute from '@routes/auth.route'
+import userModel from '@/models/users.model'
 
 afterAll(async () => {
     await new Promise<void>(resolve => setTimeout(() => resolve(), 500))
 })
+
+const AuthPath = '/'
 
 describe('Testing Auth', () => {
     describe('[POST] /signup', () => {
@@ -20,8 +23,7 @@ describe('Testing Auth', () => {
                 roles: ['']
             }
 
-            const authRoute = new AuthRoute()
-            const users = authRoute.authController.authService.users
+            const users = userModel
 
             users.findOne = jest.fn().mockReturnValue(null)
             users.create = jest.fn().mockReturnValue({
@@ -30,8 +32,8 @@ describe('Testing Auth', () => {
                 password: await bcrypt.hash(userData.password, 10)
             })
             ;(mongoose as any).connect = jest.fn()
-            const app = new App([authRoute])
-            return request(app.getServer()).post(`${authRoute.path}signup`).send(userData)
+            const app = new App(AuthRoute)
+            return request(app.getServer()).post(`${AuthPath}signup`).send(userData)
         })
     })
 
@@ -42,8 +44,7 @@ describe('Testing Auth', () => {
                 password: 'q1w2e3r4!'
             }
 
-            const authRoute = new AuthRoute()
-            const users = authRoute.authController.authService.users
+            const users = userModel
 
             users.findOne = jest.fn().mockReturnValue({
                 _id: '60706478aad6c9ad19a31c84',
@@ -51,9 +52,9 @@ describe('Testing Auth', () => {
                 password: await bcrypt.hash(userData.password, 10)
             })
             ;(mongoose as any).connect = jest.fn()
-            const app = new App([authRoute])
+            const app = new App(AuthRoute)
             return request(app.getServer())
-                .post(`${authRoute.path}login`)
+                .post(`${AuthPath}login`)
                 .send(userData)
                 .expect('Set-Cookie', /^Authorization=.+/)
         })

@@ -4,6 +4,12 @@ import { CreateRoleDto } from '@/dtos/roles.dto'
 import { RequestWithUser } from '@/interfaces/auth.interface'
 import { Role } from '@/interfaces/roles.interface'
 
+/**
+ * Creates a new Role for an existing organization
+ * @param  {Request} req http request arguments
+ * @param  {Response} res http response arguments
+ * @param  {NextFunction} next next matching route
+ */
 const createRole = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
         const rolesMatchs = Object.keys(req.body.resources).every(key => {
@@ -17,7 +23,12 @@ const createRole = async (req: RequestWithUser, res: Response, next: NextFunctio
         next(error)
     }
 }
-
+/**
+ * Creates a global role (a global role is not assigned to an organization)
+ * @param  {Request} req http request arguments
+ * @param  {Response} res http response arguments
+ * @param  {NextFunction} next next matching route
+ */
 const createGlobalRole = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
         const rolesMatchs = Object.keys(req.body.resources).every(key => {
@@ -31,7 +42,12 @@ const createGlobalRole = async (req: RequestWithUser, res: Response, next: NextF
         next(error)
     }
 }
-
+/**
+ * Get roles assigned to a specific organization
+ * @param  {Request} req http request arguments
+ * @param  {Response} res http response arguments
+ * @param  {NextFunction} next next matching route
+ */
 const getRolesByOrg = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
         const orgIdObj = require('mongodb').ObjectId(req.params.organizationId)
@@ -41,7 +57,12 @@ const getRolesByOrg = async (req: RequestWithUser, res: Response, next: NextFunc
         next(error)
     }
 }
-
+/**
+ * Get all existing roles in the database
+ * @param  {Request} req http request arguments
+ * @param  {Response} res http response arguments
+ * @param  {NextFunction} next next matching route
+ */
 const getAllRoles = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
         const findAllRoles: Role[] = await AccessControlServices.findAllRoles()
@@ -50,7 +71,12 @@ const getAllRoles = async (req: RequestWithUser, res: Response, next: NextFuncti
         next(error)
     }
 }
-
+/**
+ * Get the roles of the user
+ * @param  {Request} req http request arguments
+ * @param  {Response} res http response arguments
+ * @param  {NextFunction} next next matching route
+ */
 const getMyRoles = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
         const findMyRoles: Role[] = req.user.roles
@@ -59,7 +85,12 @@ const getMyRoles = async (req: RequestWithUser, res: Response, next: NextFunctio
         next(error)
     }
 }
-
+/**
+ * Updates a specific role
+ * @param  {Request} req http request arguments
+ * @param  {Response} res http response arguments
+ * @param  {NextFunction} next next matching route
+ */
 const updateRole = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
         const roleId = req.params.roleId
@@ -70,7 +101,12 @@ const updateRole = async (req: RequestWithUser, res: Response, next: NextFunctio
         next(error)
     }
 }
-
+/**
+ * Delete a specific role
+ * @param  {Request} req http request arguments
+ * @param  {Response} res http response arguments
+ * @param  {NextFunction} next next matching route
+ */
 const deleteRole = async (req: RequestWithUser, res: Response, next: NextFunction) => {
     try {
         const roleId = req.params.roleId
@@ -81,4 +117,4 @@ const deleteRole = async (req: RequestWithUser, res: Response, next: NextFunctio
     }
 }
 
-export { createRole, getRolesByOrg, getAllRoles, updateRole, deleteRole, createGlobalRole, getMyRoles }
+export default { createRole, getRolesByOrg, getAllRoles, updateRole, deleteRole, createGlobalRole, getMyRoles }

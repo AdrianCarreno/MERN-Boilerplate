@@ -1,27 +1,16 @@
-import { Router } from 'express'
 import AuthController from '@controllers/auth.controller'
 import { CreateUserDto, LoginUserDto } from '@dtos/users.dto'
-import { Routes } from '@interfaces/routes.interface'
 import authMiddleware from '@middlewares/auth.middleware'
 import validationMiddleware from '@middlewares/validation.middleware'
+import { Router } from 'express'
 
-class AuthRoute implements Routes {
-    public path = '/'
-    public router = Router()
-    public authController = new AuthController()
+const router = Router()
 
-    constructor() {
-        this.initializeRoutes()
-    }
+router.post(`/signup`, validationMiddleware(CreateUserDto, 'body'), AuthController.signUp)
+router.post(`/login`, validationMiddleware(LoginUserDto, 'body'), AuthController.logIn)
+router.post(`/logout`, authMiddleware(), AuthController.logOut)
+router.post(`/verify`, AuthController.verifyUserEmail)
+router.post(`/forgot-password`, AuthController.forgotPassword)
+router.post(`/reset-password`, AuthController.resetPassword)
 
-    private initializeRoutes() {
-        this.router.post(`${this.path}signup`, validationMiddleware(CreateUserDto, 'body'), this.authController.signUp)
-        this.router.post(`${this.path}login`, validationMiddleware(LoginUserDto, 'body'), this.authController.logIn)
-        this.router.post(`${this.path}logout`, authMiddleware, this.authController.logOut)
-        this.router.post(`${this.path}verify`, this.authController.verifyUserEmail)
-        this.router.post(`${this.path}forgot-password`, this.authController.forgotPassword)
-        this.router.post(`${this.path}reset-password`, this.authController.resetPassword)
-    }
-}
-
-export default AuthRoute
+export default router

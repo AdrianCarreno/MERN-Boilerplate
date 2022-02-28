@@ -1,64 +1,47 @@
 import { Router } from 'express'
 import UsersController from '@controllers/users.controller'
-import { addRoleDto, CreateUserDto } from '@dtos/users.dto'
-import { Routes } from '@interfaces/routes.interface'
+import { addRoleDto, UpdateUserDto } from '@dtos/users.dto'
 import validationMiddleware from '@middlewares/validation.middleware'
 import authMiddleware from '@/middlewares/auth.middleware'
 import { grantAccess, superAdminAccess } from '@/middlewares/permission.middleware'
 
-class UsersRoute implements Routes {
-    public path = '/api/users'
-    public router = Router()
-    public usersController = new UsersController()
+const router = Router()
+router.get(`/getUsers`, authMiddleware(), superAdminAccess(), UsersController.getUsers)
+router.get(`/`, authMiddleware(), UsersController.getUserByHeader)
+router.get(`/user/:id`, authMiddleware(), grantAccess('readAny', 'User'), UsersController.getUserById)
+router.get(
+    `/organization/:organizationId/user/:id`,
+    authMiddleware(),
+    grantAccess('readAny', 'User'),
+    UsersController.getUserByIdByOrg
+)
+router.get(
+    `/organization/:organizationId`,
+    authMiddleware(),
+    grantAccess('readAny', 'User'),
+    UsersController.getUsersByOrganization
+)
+router.put(
+    `/user/:id`,
+    authMiddleware(),
+    validationMiddleware(UpdateUserDto, 'body', true),
+    superAdminAccess(),
+    UsersController.updateUser
+)
+router.put(
+    `/addRole/user/:id`,
+    authMiddleware(),
+    validationMiddleware(addRoleDto, 'body', true),
+    grantAccess('updateAny', 'User'),
+    UsersController.addRoleToUser
+)
+router.put(
+    `/removeRole/user/:id`,
+    authMiddleware(),
+    validationMiddleware(addRoleDto, 'body', true),
+    grantAccess('updateAny', 'User'),
+    UsersController.removeRoleToUser
+)
+router.delete(`/user/:id`, authMiddleware(), superAdminAccess(), UsersController.deleteUser)
 
-    constructor() {
-        this.initializeRoutes()
-    }
-
-    private initializeRoutes() {
-        this.router.get(`${this.path}/getUsers`, authMiddleware, superAdminAccess(), this.usersController.getUsers)
-        this.router.get(`${this.path}/`, authMiddleware, this.usersController.getUserByHeader)
-        this.router.get(
-            `${this.path}/user/:id`,
-            authMiddleware,
-            grantAccess('readAny', 'User'),
-            this.usersController.getUserById
-        )
-        this.router.get(
-            `${this.path}/organization/:organizationId/user/:id`,
-            authMiddleware,
-            grantAccess('readAny', 'User'),
-            this.usersController.getUserByIdByOrg
-        )
-        this.router.get(
-            `${this.path}/organization/:organizationId`,
-            authMiddleware,
-            grantAccess('readAny', 'User'),
-            this.usersController.getUsersByOrganization
-        )
-        this.router.put(
-            `${this.path}/user/:id`,
-            authMiddleware,
-            validationMiddleware(CreateUserDto, 'body', true),
-            superAdminAccess(),
-            this.usersController.updateUser
-        )
-        this.router.put(
-            `${this.path}/addRole/user/:id`,
-            authMiddleware,
-            validationMiddleware(addRoleDto, 'body', true),
-            grantAccess('updateAny', 'User'),
-            this.usersController.addRoleToUser
-        )
-        this.router.put(
-            `${this.path}/removeRole/user/:id`,
-            authMiddleware,
-            validationMiddleware(addRoleDto, 'body', true),
-            grantAccess('updateAny', 'User'),
-            this.usersController.removeRoleToUser
-        )
-        this.router.delete(`${this.path}/user/:id`, authMiddleware, superAdminAccess(), this.usersController.deleteUser)
-    }
-}
-
-export default UsersRoute
+export default router
