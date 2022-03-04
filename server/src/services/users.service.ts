@@ -101,8 +101,6 @@ const createUser = async (userData: CreateUserDto, locale: string = env.locale):
  * @returns User with updated information
  */
 const updateUser = async (userId: string, userData: UpdateUserDto, locale: string = env.locale): Promise<User> => {
-    console.log(userId)
-    console.log(userData)
     if (isEmpty(userId)) throw new HttpException(400, __({ phrase: 'An id is required', locale }))
     if (isEmpty(userData)) throw new HttpException(400, __({ phrase: 'User data is required', locale }))
 

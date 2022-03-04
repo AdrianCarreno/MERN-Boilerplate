@@ -9,5 +9,5 @@ module.exports = {
         '^.+\\.tsx?$': 'ts-jest'
     },
     moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/src' }),
-    verbose: true
+    verbose: false
 }
