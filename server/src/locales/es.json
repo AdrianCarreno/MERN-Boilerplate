@@ -28,5 +28,7 @@
     "Wrong password": "Contraseña incorrecta",
     "You do not belong to this organization": "No perteneces a esta organización",
     "You do not have enough permission to perform this action": "No tienes los permisos necesarios para realizar esta acción",
-    "You do not have permission to create that role": "No tienes los permisos necesarios para crear ese rol"
+    "You do not have permission to create that role": "No tienes los permisos necesarios para crear ese rol",
+    "You do not have permission to update that role": "No tienes los permisos necesarios para actualizar ese rol",
+    "You do not have permission to delete that role": "No tienes los permisos necesarios para eliminar ese rol"
 }

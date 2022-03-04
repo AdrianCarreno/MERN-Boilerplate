@@ -23,6 +23,10 @@ const grantAccess = function (action: string = null, resource: string = null) {
         })
         // If the use has a global role check if it has permission
         if (globalRoleFound) {
+            if (globalRoleFound.name === superAdmin.name) {
+                req.role = globalRoleFound
+                return next()
+            }
             const permission = AccessControlServices.check(globalRoleFound._id, resource, action)
             if (permission.granted) {
                 req.role = globalRoleFound

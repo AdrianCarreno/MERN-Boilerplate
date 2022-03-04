@@ -28,5 +28,7 @@
     "Wrong password": "Wrong password",
     "You do not belong to this organization": "You do not belong to this organization",
     "You do not have enough permission to perform this action": "You do not have enough permission to perform this action",
-    "You do not have permission to create that role": "You do not have permission to create that role"
+    "You do not have permission to create that role": "You do not have permission to create that role",
+    "You do not have permission to update that role": "You do not have permission to update that role",
+    "You do not have permission to delete that role": "You do not have permission to delete that role"
 }

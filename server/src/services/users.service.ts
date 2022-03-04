@@ -57,7 +57,7 @@ const findUserById = async (userId: string, locale: string = env.locale): Promis
  * @param  {string} org Organization id to search in
  * @returns User information
  */
-const findUserByIdByOrg = async (userId: string, locale: string = env.locale, org: string): Promise<User> => {
+const findUserByIdByOrg = async (userId: string, org: string, locale: string = env.locale): Promise<User> => {
     if (isEmpty(userId)) throw new HttpException(400, __({ phrase: 'An ID is required', locale }))
     if (isEmpty(org)) throw new HttpException(400, __({ phrase: 'An Organization ID is required', locale }))
 
@@ -101,24 +101,20 @@ const createUser = async (userData: CreateUserDto, locale: string = env.locale):
  * @returns User with updated information
  */
 const updateUser = async (userId: string, userData: UpdateUserDto, locale: string = env.locale): Promise<User> => {
-    if (isEmpty(userId)) throw new HttpException(400, __({ phrase: 'An ID is required', locale }))
+    console.log(userId)
+    console.log(userData)
+    if (isEmpty(userId)) throw new HttpException(400, __({ phrase: 'An id is required', locale }))
     if (isEmpty(userData)) throw new HttpException(400, __({ phrase: 'User data is required', locale }))
-
-    if (userData.email) {
-        const findUser: User = await userModel.findOne({ email: userData.email })
-        if (findUser && findUser._id.toString() !== userId)
-            throw new HttpException(
-                409,
-                __({ phrase: 'Email {{email}} already exists', locale }, { email: userData.email })
-            )
-    }
 
     if (userData.password) {
         const hashedPassword = await bcrypt.hash(userData.password, 10)
         userData = { ...userData, password: hashedPassword }
     }
-
-    const updateUserById: User = await userModel.findByIdAndUpdate(userId, { userData })
+    const updateUserById: User = await userModel.findByIdAndUpdate(
+        userId,
+        { firstName: userData.firstName, lastName: userData.lastName },
+        { new: true }
+    )
     if (!updateUserById) throw new HttpException(409, __({ phrase: 'User not found', locale }))
 
     return updateUserById

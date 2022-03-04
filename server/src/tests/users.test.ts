@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import mongoose from 'mongoose'
 import request from 'supertest'
 import App from '@/app'
-import { addRoleDto, CreateUserDto, LoginUserDto } from '@dtos/users.dto'
+import { addRoleDto, CreateUserDto, LoginUserDto, UpdateUserDto } from '@dtos/users.dto'
 import roleModel from '@/models/roles.model'
 import organizationModel from '@/models/organizations.model'
 import { logger } from '@/utils/logger'
@@ -280,27 +280,18 @@ describe('Testing Users with Login (SuperAdmin)', () => {
     describe('[PUT] /users/user/:id', () => {
         it('response Update User', async () => {
             const userId = '61f7f6b2e299444350796a6a'
-            const userData: CreateUserDto = {
+            const email = 'test@yopmail.com'
+            const userData: UpdateUserDto = {
                 firstName: 'Super',
                 lastName: 'Admin',
-                email: 'test@yopmail.com',
                 password: 'Yourpassword1',
-                roles: ['61f7f6b2e299444350796a6e']
+                roles: [require('mongodb').ObjectId('61f7f6b2e299444350796a6e')]
             }
-
             const users = userModel
-            if (userData.email) {
-                users.findOne = jest.fn().mockReturnValue({
-                    _id: userId,
-                    email: userData.email,
-                    password: await bcrypt.hash(userData.password, 10)
-                })
-                ;(mongoose as any).connect = jest.fn()
-            }
 
             users.findByIdAndUpdate = jest.fn().mockReturnValue({
                 _id: userId,
-                email: userData.email,
+                email: email,
                 password: await bcrypt.hash(userData.password, 10)
             })
             ;(mongoose as any).connect = jest.fn()
@@ -652,12 +643,11 @@ describe('Testing Users with Login without permission', () => {
     describe('[PUT] /users/user/:id', () => {
         it('response You do not have enough permission to perform this action', async () => {
             const userId = '61f7f6b2e299444350796a6a'
-            const userData: CreateUserDto = {
+            const userData: UpdateUserDto = {
                 firstName: 'Super',
                 lastName: 'Admin',
-                email: 'test@yopmail.com',
                 password: 'Yourpassword1',
-                roles: ['61f7f6b2e299444350796a6e']
+                roles: [require('mongodb').ObjectId('61f7f6b2e299444350796a6e')]
             }
 
             return request(app.getServer())

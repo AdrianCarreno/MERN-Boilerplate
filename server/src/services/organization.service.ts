@@ -55,4 +55,4 @@ const updateOrgById = async (
     return updated
 }
 
-export { createOrganization, deleteOrgById, getOrganizations, updateOrgById }
+export default { createOrganization, deleteOrgById, getOrganizations, updateOrgById }

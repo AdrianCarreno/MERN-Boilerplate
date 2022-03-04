@@ -12,7 +12,7 @@ export class CreateOrgDto {
 
 export class UpdateOrgDto {
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     name: string
 
     @IsString()

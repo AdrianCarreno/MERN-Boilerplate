@@ -75,19 +75,27 @@ const updateAccessControl = async () => {
  * @param {*} type Type of action over the resource (e.g. createAny or createOwn)
  * @returns AccessControl~Permission, defines the granted or denied access permissions to the target resource and role
  */
-const check = (role: ObjectId, resource: string, type: string) => {
-    const typeResponses = {
-        createAny: ac.can(role.toString()).createAny(resource),
-        readAny: ac.can(role.toString()).readAny(resource),
-        updateAny: ac.can(role.toString()).updateAny(resource),
-        deleteAny: ac.can(role.toString()).deleteAny(resource),
-        createOwn: ac.can(role.toString()).createOwn(resource),
-        readOwn: ac.can(role.toString()).readOwn(resource),
-        updateOwn: ac.can(role.toString()).updateOwn(resource),
-        deleteOwn: ac.can(role.toString()).deleteOwn(resource)
+const check = (role, resource, type) => {
+    switch (type) {
+        case 'createAny':
+            return ac.can(role.toString()).createAny(resource)
+        case 'readAny':
+            return ac.can(role.toString()).readAny(resource)
+        case 'updateAny':
+            return ac.can(role.toString()).updateAny(resource)
+        case 'deleteAny':
+            return ac.can(role.toString()).deleteAny(resource)
+        case 'createOwn':
+            return ac.can(role.toString()).createOwn(resource)
+        case 'readOwn':
+            return ac.can(role.toString()).readOwn(resource)
+        case 'updateOwn':
+            return ac.can(role.toString()).updateOwn(resource)
+        case 'deleteOwn':
+            return ac.can(role.toString()).deleteOwn(resource)
+        default:
+            return ac.can(role.toString()).readAny('NONRESOURCE')
     }
-    if (!Object.keys(typeResponses).includes(type)) return ac.can(role.toString()).readAny('NONRESOURCE')
-    return typeResponses[type]
 }
 /**
  * Allows to create a role with a name (should be a generic name to translate in frontend)
@@ -213,7 +221,15 @@ const updateSuperAdmin = async (roleId: ObjectId, newResources: object) => {
  * @param  {string=env.locale} locale
  */
 const updateRole = async (roleInfo: Role, locale: string = env.locale) => {
-    const updated = await RoleModel.findByIdAndUpdate(roleInfo._id, { resources: roleInfo.resources }, { new: true })
+    const updated = await RoleModel.findByIdAndUpdate(
+        roleInfo._id,
+        {
+            name: roleInfo.name,
+            resources: roleInfo.resources,
+            description: roleInfo.description
+        },
+        { new: true }
+    )
     if (!updated) throw new HttpException(409, __({ phrase: 'Role not found', locale }))
     await updateAccessControl()
     return updated

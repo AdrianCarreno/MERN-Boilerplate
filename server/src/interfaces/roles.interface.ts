@@ -3,6 +3,7 @@ import { ObjectId } from 'mongoose'
 export interface Organization {
     _id: ObjectId
     name: string
+    description?: string
 }
 
 export interface Role {

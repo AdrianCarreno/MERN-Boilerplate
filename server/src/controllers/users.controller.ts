@@ -66,7 +66,7 @@ const getUserByIdByOrg = async (req: Request, res: Response, next: NextFunction)
         const userId: string = req.params.id
         const organizationId: string = req.params.organizationId
         const userLocale = req.cookies.language || locale
-        const findOneUserData: User = await UserService.findUserByIdByOrg(userId, userLocale, organizationId)
+        const findOneUserData: User = await UserService.findUserByIdByOrg(userId, organizationId, userLocale)
 
         res.status(200).json({ data: findOneUserData, message: 'findOne' })
     } catch (error) {
@@ -101,6 +101,7 @@ const updateUser = async (req: Request, res: Response, next: NextFunction) => {
         const userId: string = req.params.id
         const userData: UpdateUserDto = req.body
         const userLocale = req.cookies.language || locale
+        console.log('here')
         const updateUserData: User = await UserService.updateUser(userId, userData, userLocale)
 
         res.status(200).json({ data: updateUserData, message: 'updated' })
