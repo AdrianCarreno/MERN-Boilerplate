@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Navbar } from './components'
+import { Footer, Navbar } from './components'
 import { Auth, Miscelaneous } from './pages'
 import i18next from 'i18next'
 import { initReactI18next } from 'react-i18next'
@@ -54,6 +54,7 @@ export default function App() {
                     <Route path="*" element={<Miscelaneous.NotFoundPage />} />
                 </Routes>
             </main>
+            <Footer />
         </BrowserRouter>
     )
 }

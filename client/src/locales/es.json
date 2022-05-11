@@ -13,15 +13,25 @@
     },
     "homePage": {
         "title": "Inicio",
-        "description": "Descripción de la página de inicio"
+        "description": "¡Que agrado tenerte con nosotros!"
     },
     "aboutPage": {
         "title": "Nosotros",
+        "title-view": "Conociéndonos un poco más",
         "description": "Descripción de la página Acerca de nosotros"
     },
     "contactPage": {
         "title": "Contacto",
-        "description": "Descripción de la página de contacto"
+        "description": "Descripción de la página de contacto",
+        "call": "Llámanos +56935566799",
+        "email": "Email: empresa@granempresa.cl",
+        "address": "Dirección: Av. Apoquindo 73448, oficina 1204, Las Condes",
+        "form-category-selection": "Selecciona una categoría",
+        "form-name": "Tu nombre:",
+        "form-email": "Correo",
+        "form-info": "Nunca compartiremos su correo electrónico con nadie más.",
+        "form-content": "Indícanos a continuación lo que necesites:",
+        "form-button": "Enviar Mensaje"
     },
     "registerPage": {
         "title": "Registro",

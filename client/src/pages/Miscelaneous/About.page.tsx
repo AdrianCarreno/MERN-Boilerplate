@@ -1,12 +1,14 @@
 import { t } from 'i18next'
+import { AboutContainer } from '../../components'
 
 export default function AboutPage() {
     return (
         <div className="container">
-            <h1 className="text-center" style={{ paddingTop: '30%' }}>
-                {t('aboutPage:title')}
+            <h1 className="text-center" style={{ paddingTop: '15vh' }}>
+                {t('aboutPage:title-view')}
             </h1>
-            <p>{t('aboutPage:description')}</p>
+            <br />
+            <AboutContainer />
         </div>
     )
 }

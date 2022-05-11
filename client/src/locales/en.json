@@ -13,15 +13,25 @@
     },
     "homePage": {
         "title": "Home",
-        "description": "Home page description"
+        "description": "How nice to have you with us!"
     },
     "aboutPage": {
         "title": "About Us",
+        "title-view": "Getting to know each other a little better",
         "description": "About Us page description"
     },
     "contactPage": {
         "title": "Contact Us",
-        "description": "Contact Us page description"
+        "description": "Contact Us page description",
+        "call": "Call Us +56935566799",
+        "email": "Email: empresa@granempresa.cl",
+        "address": "Address: Av. Apoquindo 73448, department 1204, Las Condes",
+        "form-category-selection": "Select a category",
+        "form-name": "Your name:",
+        "form-email": "Email:",
+        "form-info": "We ll never share your email with anyone else.",
+        "form-content": "Tell us what you need below:",
+        "form-button": "Send Message"
     },
     "registerPage": {
         "title": "Register",
