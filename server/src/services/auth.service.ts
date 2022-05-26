@@ -13,6 +13,8 @@ import jwt from 'jsonwebtoken'
 import { sendHTMLEmail } from './email.service'
 import path from 'path'
 import { ObjectId } from 'mongoose'
+import authenticationMethodModel from '@/models/authenticationMethod.model'
+
 /**
  * Creates user account in the data base
  * @param  {CreateUserDto} userData User data to create account
@@ -33,7 +35,14 @@ const signup = async (
         )
 
     const hashedPassword = await bcrypt.hash(userData.password, 10)
-    const createUserData: User = await userModel.create({ ...userData, password: hashedPassword })
+    delete userData.password
+    const createUserData: User = await userModel.create(userData)
+    if (!createUserData) throw new HttpException(409, __({ phrase: 'Unable to create user', locale }))
+    const authenticationMethod = await authenticationMethodModel.create({
+        userId: createUserData._id,
+        type: 'PASSWORD',
+        password: hashedPassword
+    })
     const loginToken = createToken(createUserData)
     const cookie = createCookie(loginToken)
 
@@ -54,6 +63,7 @@ const signup = async (
 
     return { cookie, createdUser: createUserData }
 }
+
 /**
  * Login into an existing account
  * @param  {LoginUserDto} userData User data to login
@@ -69,8 +79,9 @@ const login = async (
     const findUser: User = await userModel.findOne({ email: userData.email })
     if (!findUser)
         throw new HttpException(409, __({ phrase: 'Email {{email}} not found', locale }, { email: userData.email }))
-
-    const isPasswordMatching: boolean = await bcrypt.compare(userData.password, findUser.password)
+    console.log(findUser)
+    const authenticationMethod = await authenticationMethodModel.findOne({ userId: findUser._id, type: 'PASSWORD' })
+    const isPasswordMatching: boolean = await bcrypt.compare(userData.password, authenticationMethod?.password)
     if (!isPasswordMatching) throw new HttpException(409, __({ phrase: 'Wrong password', locale }))
 
     const token = createToken(findUser, 3600)
@@ -82,12 +93,13 @@ const login = async (
 const logout = async (userData: User, locale: string = env.locale): Promise<User> => {
     if (isEmpty(userData)) throw new HttpException(400, __({ phrase: 'Credentials are required', locale }))
 
-    const findUser: User = await userModel.findOne({ email: userData.email, password: userData.password })
+    const findUser: User = await userModel.findOne({ email: userData.email })
     if (!findUser)
         throw new HttpException(409, __({ phrase: 'Email {{email}} not found', locale }, { email: userData.email }))
 
     return findUser
 }
+
 /**
  * Saves the date the user verify the account via email
  * @param  {ObjectId} userId
@@ -149,14 +161,15 @@ const resetPasswordService = async (token: string, password: string, locale: str
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    const findUser: User = await userModel.findOneAndUpdate(
-        { _id: tokenData._id },
+    const authenticationMethod = await authenticationMethodModel.findOneAndUpdate(
+        { userId: tokenData._id, type: 'PASSWORD' },
         { password: hashedPassword },
         { new: true }
     )
-    if (!findUser) throw new HttpException(409, __({ phrase: 'User not found', locale }))
-    return findUser
+    if (!authenticationMethod) throw new HttpException(409, __({ phrase: 'User not found', locale }))
+    return authenticationMethod.user
 }
+
 /**
  * Returns a signed token with expiration date
  * @param  {User} user User information to save in the token
@@ -169,6 +182,7 @@ const createToken = (user: User, expiresIn = 3600): TokenData => {
 
     return { expiresIn, token: jwt.sign(dataStoredInToken, secretKey, { expiresIn }) }
 }
+
 /**
  * Verify the token with secret key
  * @param  {string} token token to verify
@@ -180,6 +194,7 @@ const verifyToken = (token: string, ignoreExpiration = false): DataStoredInToken
 
     return jwt.verify(token, secretKey, { ignoreExpiration }) as DataStoredInToken
 }
+
 /**
  * Creates the string to use as a cookie
  * @param  {TokenData} tokenData signed token with user information
@@ -189,8 +204,7 @@ const createCookie = (tokenData: TokenData): string => {
     return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`
 }
 
-// export default AuthService
-export default {
+const AuthService = {
     signup,
     login,
     logout,
@@ -201,3 +215,15 @@ export default {
     createCookie,
     createToken
 }
+export {
+    signup,
+    login,
+    logout,
+    verifyToken,
+    resetPasswordService,
+    forgotPasswordService,
+    verifyUserEmailService,
+    createCookie,
+    createToken
+}
+export default AuthService

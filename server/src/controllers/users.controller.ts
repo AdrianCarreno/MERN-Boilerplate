@@ -24,6 +24,7 @@ const getUsersByOrganization = async (req: RequestWithUser, res: Response, next:
         next(error)
     }
 }
+
 /**
  * Get all the existing users in the database
  * @param  {Request} req http request arguments
@@ -38,6 +39,7 @@ const getUsers = async (req: RequestWithUser, res: Response, next: NextFunction)
         next(error)
     }
 }
+
 /**
  * Get one user, searched by id
  * @param  {Request} req http request arguments
@@ -55,6 +57,7 @@ const getUserById = async (req: Request, res: Response, next: NextFunction) => {
         next(error)
     }
 }
+
 /**
  * Get one user in a specific organization, searched by id
  * @param  {Request} req http request arguments
@@ -73,6 +76,7 @@ const getUserByIdByOrg = async (req: Request, res: Response, next: NextFunction)
         next(error)
     }
 }
+
 /**
  * Creates a new user in the database
  * @param  {Request} req http request arguments
@@ -90,6 +94,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
         next(error)
     }
 }
+
 /**
  * Update the information of a specific user
  * @param  {Request} req http request arguments
@@ -108,6 +113,7 @@ const updateUser = async (req: Request, res: Response, next: NextFunction) => {
         next(error)
     }
 }
+
 /**
  * Add one role to a specific user
  * @param  {Request} req http request arguments
@@ -138,6 +144,7 @@ const addRoleToUser = async (req: RequestWithUser, res: Response, next: NextFunc
         next(error)
     }
 }
+
 /**
  * Remove one role of a specific user
  * @param  {Request} req http request arguments
@@ -166,6 +173,7 @@ const removeRoleToUser = async (req: RequestWithUser, res: Response, next: NextF
         next(error)
     }
 }
+
 /**
  * Deletes a specific user
  * @param  {Request} req http request arguments
@@ -183,6 +191,7 @@ const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
         next(error)
     }
 }
+
 /**
  * Get information of the logged user
  * @param  {Request} req http request arguments

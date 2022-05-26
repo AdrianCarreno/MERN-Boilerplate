@@ -4,12 +4,13 @@
         "contact": "contacto",
         "login": "login",
         "register": "registro",
-        "forgot-password": "olvide-contraseña",
-        "reset-password": "restablecer-contraseña",
+        "forgot-password": "olvide-contrasena",
+        "reset-password": "restablecer-contrasena",
         "verify": "verificar"
     },
     "common": {
-        "loading": "Cargando..."
+        "loading": "Cargando...",
+        "submit": "Enviar"
     },
     "homePage": {
         "title": "Inicio",
@@ -27,11 +28,32 @@
         "email": "Email: empresa@granempresa.cl",
         "address": "Dirección: Av. Apoquindo 73448, oficina 1204, Las Condes",
         "form-category-selection": "Selecciona una categoría",
-        "form-name": "Tu nombre:",
+        "form-name": "Tu nombre",
         "form-email": "Correo",
         "form-info": "Nunca compartiremos su correo electrónico con nadie más.",
-        "form-content": "Indícanos a continuación lo que necesites:",
-        "form-button": "Enviar Mensaje"
+        "form-content": "Indícanos a continuación lo que necesites",
+        "form-button": "Enviar mensaje"
+    },
+    "verifyEmailPage": {
+        "title": "Verificar correo electrónico",
+        "description": "Descripción de la página de verificación de correo electrónico",
+        "form-button": "Verificar"
+    },
+    "resetPasswordPage": {
+        "title": "Restablecer contraseña",
+        "description": "Descripción de la página de restablecer contraseña",
+        "form-button": "Restablecer",
+        "success": "¡Tu contraseña ha sido restablecida!",
+        "password": "Contraseña",
+        "confirmPassword": "Confirmar contraseña",
+        "passwordPattern": "Debe contener al menos un número y una letra mayúscula y minúscula, y al menos 8 o más caracteres"
+    },
+    "forgotPasswordPage": {
+        "title": "Olvidé mi contraseña",
+        "emailSent": "Correo electrónico enviado",
+        "email": "Correo electrónico",
+        "description": "Descripción de la página de olvido de contraseña",
+        "form-button": "Enviar"
     },
     "registerPage": {
         "title": "Registro",
@@ -46,6 +68,14 @@
         "submit": "Registrarse",
         "success_one": "¡Registrado! En {{count}} segundo será redirigido a la página de inicio.",
         "success_other": "¡Registrado! En {{count}} segundos será redirigido a la página de inicio."
+    },
+    "loginPage": {
+        "title": "Iniciar sesión",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "submit": "Iniciar sesión",
+        "forgotPassword": "¿Olvidaste tu contraseña?",
+        "wrongCredentials": "Credenciales incorrectas"
     },
     "notFound": {
         "title": "404",

@@ -15,3 +15,13 @@ export interface RequestWithUser extends Request {
     user: User
     role: Role
 }
+
+export interface AuthenticationMethod {
+    userId: ObjectId
+    user: User
+    type: string
+    password?: string
+    accessToken?: string
+    refreshToken?: string
+    expiresIn?: number
+}

@@ -34,11 +34,6 @@ export class UpdateUserDto {
     lastName: string
 
     @IsOptional()
-    @IsString()
-    @IsNotEmpty()
-    password: string
-
-    @IsOptional()
     @IsNotEmpty()
     roles: Array<ObjectId>
 }
