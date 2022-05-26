@@ -4,6 +4,7 @@ import axios from 'axios'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { Button, Form, InputGroup } from 'react-bootstrap'
 import './Auth.scss'
+import { t } from 'i18next'
 
 export default function LoginBox() {
     const [inputs, setInputs] = useState({})
@@ -31,24 +32,24 @@ export default function LoginBox() {
     return (
         <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
+                <Form.Label>{t('loginPage:email')}</Form.Label>
                 <Form.Control
                     name="email"
                     type="email"
-                    placeholder="Enter email"
+                    placeholder={t('loginPage:email')}
                     autoComplete="username"
                     isInvalid={error}
                     onChange={handleChange}
                 />
-                <Form.Control.Feedback type="invalid">Wrong credentials.</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">{t('loginPage:wrongCredentials')}</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Label>Password</Form.Label>
+            <Form.Label>{t('loginPage:password')}</Form.Label>
             <InputGroup className="mb-3">
                 <Form.Control
                     name="password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Password"
+                    placeholder={t('loginPage:password')}
                     autoComplete="current-password"
                     onChange={handleChange}
                 />
@@ -58,10 +59,10 @@ export default function LoginBox() {
             </InputGroup>
 
             <Button variant="primary" type="submit">
-                Submit
+                {t('loginPage:submit')}
             </Button>
             <p className="forgot-password text-right">
-                <a href="/forgot-password">Forgot password?</a>
+                <a href="/forgot-password">{t('loginPage:forgotPassword')}</a>
             </p>
         </Form>
     )

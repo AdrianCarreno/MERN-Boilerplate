@@ -23,6 +23,7 @@ const createRole = async (req: RequestWithUser, res: Response, next: NextFunctio
         next(error)
     }
 }
+
 /**
  * Creates a global role (a global role is not assigned to an organization)
  * @param  {Request} req http request arguments
@@ -42,6 +43,7 @@ const createGlobalRole = async (req: RequestWithUser, res: Response, next: NextF
         next(error)
     }
 }
+
 /**
  * Get roles assigned to a specific organization
  * @param  {Request} req http request arguments
@@ -57,6 +59,7 @@ const getRolesByOrg = async (req: RequestWithUser, res: Response, next: NextFunc
         next(error)
     }
 }
+
 /**
  * Get all existing roles in the database
  * @param  {Request} req http request arguments
@@ -71,6 +74,7 @@ const getAllRoles = async (req: RequestWithUser, res: Response, next: NextFuncti
         next(error)
     }
 }
+
 /**
  * Get the roles of the user
  * @param  {Request} req http request arguments
@@ -85,6 +89,7 @@ const getMyRoles = async (req: RequestWithUser, res: Response, next: NextFunctio
         next(error)
     }
 }
+
 /**
  * Updates a specific role
  * @param  {Request} req http request arguments
@@ -101,6 +106,7 @@ const updateRole = async (req: RequestWithUser, res: Response, next: NextFunctio
         next(error)
     }
 }
+
 /**
  * Delete a specific role
  * @param  {Request} req http request arguments

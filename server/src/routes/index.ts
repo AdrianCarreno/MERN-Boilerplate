@@ -9,7 +9,7 @@ import GraphQLRoutes from '@/routes/graphql.route'
 
 const router = Router()
 
-router.use('/', AuthRoutes)
+router.use('/api/auth', AuthRoutes)
 router.use('/', IndexRoutes)
 router.use('/graphql', GraphQLRoutes)
 router.use('/api/organizations', OrgRoutes)

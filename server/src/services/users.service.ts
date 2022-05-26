@@ -27,6 +27,7 @@ const findAllUserByOrg = async (org: string, locale: string = env.locale): Promi
 
     return usersFiltered
 }
+
 /**
  * Find all the users in the data base
  * @returns Array of users
@@ -36,6 +37,7 @@ const findAllUser = async (): Promise<User[]> => {
 
     return users
 }
+
 /**
  * Find one user
  * @param  {string} userId User id to search
@@ -50,6 +52,7 @@ const findUserById = async (userId: string, locale: string = env.locale): Promis
 
     return findUser
 }
+
 /**
  * Find one user in one organization
  * @param  {string} userId User id to search
@@ -73,6 +76,7 @@ const findUserByIdByOrg = async (userId: string, org: string, locale: string = e
 
     return findUser
 }
+
 /**
  * Creates a new User in the data base
  * @param  {CreateUserDto} userData user to create
@@ -93,6 +97,7 @@ const createUser = async (userData: CreateUserDto, locale: string = env.locale):
 
     return createUserData
 }
+
 /**
  * Update information of a user
  * @param  {string} userId user to update
@@ -117,6 +122,7 @@ const updateUser = async (userId: string, userData: UpdateUserDto, locale: strin
 
     return updateUserById
 }
+
 /**
  * Add one role to a user
  * @param  {string} userId user to add role
@@ -162,6 +168,7 @@ const addRoleToUser = async (userId: string, findRole: Role, locale: string = en
 
     return updateUserById
 }
+
 /**
  * Remove one role assigned to user
  * @param  {string} userId user id to remove role
@@ -182,6 +189,7 @@ const removeRoleToUser = async (userId: string, findRole: Role, locale: string =
     }
     return updateUserById
 }
+
 /**
  * Delete user in the data base via id
  * @param  {string} userId user id to delete

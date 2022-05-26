@@ -19,6 +19,7 @@ const createOrganization = async (orgInfo: CreateOrgDto, locale: string = env.lo
         )
     return newOrganization
 }
+
 /**
  * Deletes an organization using id
  * @param  {string} organizationId Id of the Organization to delete
@@ -30,6 +31,7 @@ const deleteOrgById = async (organizationId: string, locale: string = env.locale
     if (!deleted) throw new HttpException(404, __({ phrase: 'Oganization not found', locale }))
     return deleted
 }
+
 /**
  * Search for all organizations in the data base
  * @returns Array of organizations
@@ -38,6 +40,7 @@ const getOrganizations = async (): Promise<Organization[]> => {
     const organizations = await OrganizationModel.find()
     return organizations
 }
+
 /**
  * Update an organization
  * @param  {string} organizationId Id of the organization to update

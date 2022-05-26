@@ -7,8 +7,7 @@ export interface User {
     fullName: string
     name: string
     email: string
-    password: string
-    emailVerifiedAt: Date | null
+    emailVerifiedAt?: Date | null
     createdAt?: Date
     updatedAt?: Date
     roles: Array<Role>

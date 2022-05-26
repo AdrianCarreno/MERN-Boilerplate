@@ -23,6 +23,7 @@ const signUp = async (req: Request, res: Response, next: NextFunction) => {
         next(error)
     }
 }
+
 /**
  * Log in into an existing account (user)
  * @param  {Request} req http request arguments
@@ -41,6 +42,7 @@ const logIn = async (req: Request, res: Response, next: NextFunction) => {
         next(error)
     }
 }
+
 /**
  * Log out of an already logged in account, set authorization equals to null
  * @param  {Request} req http request arguments
@@ -59,6 +61,7 @@ const logOut = async (req: RequestWithUser, res: Response, next: NextFunction) =
         next(error)
     }
 }
+
 /**
  * Saves the date the user verify the account via email
  * @param  {Request} req http request arguments
@@ -77,6 +80,7 @@ const verifyUserEmail = async (req: Request, res: Response, next: NextFunction) 
         next(error)
     }
 }
+
 /**
  * Initiates reset password process for a given email
  * @param  {Request} req http request arguments
@@ -94,6 +98,7 @@ const forgotPassword = async (req: Request, res: Response, next: NextFunction) =
         next(error)
     }
 }
+
 /**
  * Resets password for a given token (user)
  * @param  {Request} req http request arguments

@@ -1,5 +1,5 @@
 import { Organization } from '@/interfaces/roles.interface'
-import { model, Schema } from 'mongoose'
+import { model, Schema, Document } from 'mongoose'
 
 const organizationSchema = new Schema(
     {
@@ -13,7 +13,8 @@ const organizationSchema = new Schema(
         }
     },
     {
-        timestamps: true
+        timestamps: true,
+        id: false
     }
 )
 

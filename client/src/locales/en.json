@@ -9,7 +9,8 @@
         "verify": "verify"
     },
     "common": {
-        "loading": "Loading..."
+        "loading": "Loading...",
+        "submit": "Submit"
     },
     "homePage": {
         "title": "Home",
@@ -27,11 +28,31 @@
         "email": "Email: empresa@granempresa.cl",
         "address": "Address: Av. Apoquindo 73448, department 1204, Las Condes",
         "form-category-selection": "Select a category",
-        "form-name": "Your name:",
-        "form-email": "Email:",
+        "form-name": "Your name",
+        "form-email": "Email",
         "form-info": "We ll never share your email with anyone else.",
-        "form-content": "Tell us what you need below:",
-        "form-button": "Send Message"
+        "form-content": "Tell us what you need below",
+        "form-button": "Send message"
+    },
+    "verifyEmailPage": {
+        "title": "Verify Email",
+        "description": "Verify Email page description",
+        "form-button": "Verify email"
+    },
+    "resetPasswordPage": {
+        "title": "Reset Password",
+        "description": "Reset Password page description",
+        "form-button": "Reset password",
+        "success": "Your password has been reset successfully.",
+        "password": "Password",
+        "confirmPassword": "Confirm password"
+    },
+    "forgotPasswordPage": {
+        "title": "Forgot Password",
+        "emailSent": "Email sent",
+        "email": "Email",
+        "description": "Forgot Password page description",
+        "form-button": "Send email"
     },
     "registerPage": {
         "title": "Register",
@@ -46,6 +67,14 @@
         "submit": "Register",
         "success_one": "Registered!. In {{count}} second you will be redirected to the home page.",
         "success_other": "Registered!. In {{count}} seconds you will be redirected to the home page."
+    },
+    "loginPage": {
+        "title": "Login",
+        "email": "Email",
+        "password": "Password",
+        "submit": "Login",
+        "forgotPassword": "Forgot your password?",
+        "wrongCredentials": "Wrong credentials"
     },
     "notFound": {
         "title": "404",

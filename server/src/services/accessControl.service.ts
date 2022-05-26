@@ -44,6 +44,7 @@ const initAccessControl = async () => {
         console.error(error)
     }
 }
+
 /**
  * Allows to update access control
  */
@@ -97,6 +98,7 @@ const check = (role, resource, type) => {
             return ac.can(role.toString()).readAny('NONRESOURCE')
     }
 }
+
 /**
  * Allows to create a role with a name (should be a generic name to translate in frontend)
  * and a resources object that should follow the format example shown in models/permissionRole.js.
@@ -140,6 +142,7 @@ const createRole = async (
         }
     } else throw new HttpException(409, __({ phrase: 'You do not have permission to create that role', locale }))
 }
+
 /**
  * Allows to create a role with a name (should be a generic name to translate in frontend)
  * and a resources object that should follow the format example shown in models/permissionRole.js.
@@ -168,6 +171,7 @@ const createGlobalRole = async (
         }
     } else throw new HttpException(409, __({ phrase: 'You do not have permission to create that role', locale }))
 }
+
 /**
  * Allows to create a role with a name (should be a generic name to translate in frontend)
  * and a resources object that should follow the format example shown in models/permissionRole.js.
@@ -215,6 +219,7 @@ const updateSuperAdmin = async (roleId: ObjectId, newResources: object) => {
         throw new Error(error.message)
     }
 }
+
 /**
  * Allows to update a role using id and new information
  * @param  {Role} roleInfo Information to update
@@ -247,6 +252,7 @@ const deleteRole = async (roleId: string, locale: string = env.locale) => {
     await updateAccessControl()
     return deleted
 }
+
 /**
  * Search for all roles in an organization
  * @param  {Organization} orgInfo information of the organiuzation to search
@@ -257,6 +263,7 @@ const findRolesByOrg = async (orgInfo: Organization): Promise<Role[]> => {
 
     return roles
 }
+
 /**
  * Find all roles in DB
  * @returns Array of roles
@@ -266,6 +273,7 @@ const findAllRoles = async (): Promise<Role[]> => {
 
     return roles
 }
+
 /**
  * Updates a role
  * @param  {string} roleId Id of the role to update
@@ -279,6 +287,7 @@ const updateRoleById = async (roleId: string, roleData: UpdateRoleDto, locale: s
     await updateAccessControl()
     return updated
 }
+
 /**
  * Creates an account to use as a super admin with .env
  * @returns new user

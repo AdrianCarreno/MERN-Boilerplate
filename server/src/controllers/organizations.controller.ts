@@ -18,6 +18,7 @@ const createOrg = async (req: Request, res: Response, next: NextFunction) => {
         next(error)
     }
 }
+
 /**
  * Get all existing organizations in the database
  * @param  {Request} req http request arguments
@@ -32,6 +33,7 @@ const getAllOrgs = async (req: Request, res: Response, next: NextFunction) => {
         next(error)
     }
 }
+
 /**
  * Get the organizations of a user
  * @param  {Request} req http request arguments
@@ -51,6 +53,7 @@ const getMyOrgs = async (req: RequestWithUser, res: Response, next: NextFunction
         next(error)
     }
 }
+
 /**
  * Updates an organization
  * @param  {Request} req http request arguments
@@ -70,6 +73,7 @@ const updateOrganization = async (req: Request, res: Response, next: NextFunctio
         next(error)
     }
 }
+
 /**
  * Deletes an organization
  * @param  {Request} req http request arguments
