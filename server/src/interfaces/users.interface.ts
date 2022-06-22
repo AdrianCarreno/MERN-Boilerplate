@@ -11,4 +11,5 @@ export interface User {
     createdAt?: Date
     updatedAt?: Date
     roles: Array<Role>
+    password: string
 }

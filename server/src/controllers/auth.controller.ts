@@ -12,6 +12,7 @@ import { ObjectId } from 'mongoose'
  * @param  {NextFunction} next next matching route
  */
 const signUp = async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.body)
     try {
         const userData: CreateUserDto = req.body
         const userLocale = req.cookies.language || locale
