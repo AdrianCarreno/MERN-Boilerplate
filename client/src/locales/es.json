@@ -6,7 +6,8 @@
         "register": "registro",
         "forgot-password": "olvide-contrasena",
         "reset-password": "restablecer-contrasena",
-        "verify": "verificar"
+        "verify": "verificar",
+        "profile": "perfil"
     },
     "common": {
         "loading": "Cargando...",
@@ -80,5 +81,8 @@
     "notFound": {
         "title": "404",
         "description": "Página no encontrada"
+    },
+    "profile": {
+        "title": "Mi perfil"
     }
 }

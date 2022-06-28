@@ -3,6 +3,7 @@ import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 import { ChangeEvent, FormEvent, useState } from 'react'
 import { Button, Form, InputGroup } from 'react-bootstrap'
+import { loginSet } from '../../Global'
 import './Auth.scss'
 import { t } from 'i18next'
 
@@ -21,7 +22,7 @@ export default function LoginBox() {
         axios
             .post('/api/auth/login', inputs)
             .then(res => {
-                console.log(res)
+                loginSet(JSON.stringify(res.data.data))
             })
             .catch(err => {
                 console.log(err)

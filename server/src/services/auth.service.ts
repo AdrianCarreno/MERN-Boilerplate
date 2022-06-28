@@ -79,7 +79,6 @@ const login = async (
     const findUser: User = await userModel.findOne({ email: userData.email })
     if (!findUser)
         throw new HttpException(409, __({ phrase: 'Email {{email}} not found', locale }, { email: userData.email }))
-    console.log(findUser)
     const authenticationMethod = await authenticationMethodModel.findOne({ userId: findUser._id, type: 'PASSWORD' })
     const isPasswordMatching: boolean = await bcrypt.compare(userData.password, authenticationMethod?.password)
     if (!isPasswordMatching) throw new HttpException(409, __({ phrase: 'Wrong password', locale }))

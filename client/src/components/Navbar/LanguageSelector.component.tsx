@@ -6,7 +6,6 @@ import Cookies from 'js-cookie'
 
 export default function LanguageSelectorComponent() {
     const [language, setLanguage] = useState<string>('en')
-    const [showLanguageDropdown, setShowLanguageDropdown] = useState<boolean>(false)
     const { i18n } = useTranslation()
 
     const getFlag = (lang: string) => {
@@ -48,19 +47,16 @@ export default function LanguageSelectorComponent() {
             Cookies.set('language', eventKey)
             await i18n.reloadResources()
         }
-        setShowLanguageDropdown(false)
         window.location.reload()
     }
 
     return (
         <Dropdown
             id="language-selector"
-            show={showLanguageDropdown}
-            onMouseEnter={() => setShowLanguageDropdown(true)}
             onSelect={handleSelect}
         >
             <Dropdown.Toggle variant="success">{getFlag(language)}</Dropdown.Toggle>
-            <Dropdown.Menu onMouseLeave={() => setShowLanguageDropdown(false)}>
+            <Dropdown.Menu >
                 <Dropdown.Item eventKey="en">{getFlag('en')} English</Dropdown.Item>
                 <Dropdown.Item eventKey="es">{getFlag('es')} Español</Dropdown.Item>
             </Dropdown.Menu>

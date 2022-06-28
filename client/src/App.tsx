@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Footer, Navbar } from './components'
-import { Auth, Miscelaneous } from './pages'
+import { Auth, Miscelaneous, Profile } from './pages'
 import i18next from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
@@ -50,6 +50,9 @@ export default function App() {
                     ))}
                     {Object.entries(resources).map(([key, value]) => (
                         <Route key={key} path={value.routes.verify} element={<Auth.VerifyEmailPage />} />
+                    ))}
+                    {Object.entries(resources).map(([key, value]) => (
+                        <Route key={key} path={value.routes.profile} element={<Profile.ProfilePage />} />
                     ))}
                     <Route path="*" element={<Miscelaneous.NotFoundPage />} />
                 </Routes>

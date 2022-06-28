@@ -1,4 +1,4 @@
-import { faEnvelope, faHouseUser, faUsers, faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faHouseUser, faUsers, faUserPlus, faUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import { Dropdown } from 'react-bootstrap'
 import { NavLink } from 'react-router-dom'
@@ -6,6 +6,7 @@ import { LoginModal } from '../Auth'
 import './Navbar.scss'
 import '../../global.scss'
 import LanguageSelectorComponent from './LanguageSelector.component'
+import { getUser, isLogin } from '../../Global'
 import { t } from 'i18next'
 
 export default function Navbar() {
@@ -47,17 +48,31 @@ export default function Navbar() {
                     <li>
                         <LanguageSelectorComponent />
                     </li>
-                    <li className="nav-item active">
-                        <Dropdown className="btn-group">
-                            <LoginModal />
-                            <Dropdown.Toggle split variant="success" id="dropdown-split-basic" />
-                            <Dropdown.Menu>
-                                <Dropdown.Item href={t('routes:register')}>
-                                    <Icon icon={faUserPlus} /> {t('registerPage:title')}
-                                </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </li>
+                    {!isLogin()
+                        ? <li className="nav-item active">
+                            <Dropdown className="btn-group">
+                                <LoginModal />
+                                <Dropdown.Toggle split variant="success" id="dropdown-split-basic" />
+                                <Dropdown.Menu>
+                                    <Dropdown.Item href={t('routes:register')}>
+                                        <Icon icon={faUserPlus} /> {t('registerPage:title')}
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </li>
+                        : <li className="nav-item active">
+                            <Dropdown className="btn-group">
+                                <Dropdown.Toggle split variant="success" id="dropdown-split-basic">{getUser().fullName} </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                    <Dropdown.Item href={t('routes:profile')}>
+                                        <Icon style={{ marginRight: '0.5em' }} icon={faUser} />
+                                        {t('profile:title')}
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </li>
+                    }
                 </ul>
             </div>
         </nav>
