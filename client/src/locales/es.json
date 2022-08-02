@@ -6,7 +6,8 @@
         "register": "registro",
         "forgot-password": "olvide-contrasena",
         "reset-password": "restablecer-contrasena",
-        "verify": "verificar"
+        "verify": "verificar",
+        "profile": "perfil"
     },
     "common": {
         "loading": "Cargando...",
@@ -14,7 +15,7 @@
     },
     "homePage": {
         "title": "Inicio",
-        "description": "¡Que agrado tenerte con nosotros!"
+        "description": "¡Qué agrado tenerte con nosotros!"
     },
     "aboutPage": {
         "title": "Nosotros",
@@ -80,5 +81,8 @@
     "notFound": {
         "title": "404",
         "description": "Página no encontrada"
+    },
+    "profile": {
+        "title": "Mi perfil"
     }
 }

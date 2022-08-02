@@ -6,7 +6,8 @@
         "register": "register",
         "forgot-password": "forgot-password",
         "reset-password": "reset-password",
-        "verify": "verify"
+        "verify": "verify",
+        "profile": "profile"
     },
     "common": {
         "loading": "Loading...",
@@ -79,5 +80,8 @@
     "notFound": {
         "title": "404",
         "description": "Page not found"
+    },
+    "profile": {
+        "title": "My profile"
     }
 }
