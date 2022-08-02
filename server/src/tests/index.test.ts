@@ -11,10 +11,9 @@ afterAll(async () => {
 describe('Testing Index', () => {
     describe('[GET] /', () => {
         it('response statusCode 200', () => {
-            const indexRoute = new IndexRoute()
-            const app = new App([indexRoute])
+            const app = new App(IndexRoute)
 
-            return request(app.getServer()).get(`${indexRoute.path}`).expect(200)
+            return request(app.getServer()).get(`/`).expect(200)
         })
     })
 })

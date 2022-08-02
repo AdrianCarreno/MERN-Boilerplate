@@ -1,13 +1,17 @@
-import { faEnvelope, faHouseUser, faUsers, faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faHouseUser, faUsers, faUserPlus, faUser } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import { Dropdown } from 'react-bootstrap'
 import { NavLink } from 'react-router-dom'
 import { LoginModal } from '../Auth'
 import './Navbar.scss'
+import '../../global.scss'
+import LanguageSelectorComponent from './LanguageSelector.component'
+import { getUser, isLogin } from '../../Global'
+import { t } from 'i18next'
 
 export default function Navbar() {
     return (
-        <nav className="navbar navbar-expand-lg navbar-mainbg">
+        <nav className="navbar navbar-expand-lg navbar-mainbg fixed-top padding-10">
             <NavLink className="navbar-brand navbar-logo" to="/">
                 <img src="logo192.png" alt="logo" />
             </NavLink>
@@ -27,31 +31,48 @@ export default function Navbar() {
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul className="navbar-nav ms-auto">
                     <li className="nav-item active">
-                        <NavLink className="nav-link" to="/">
-                            <Icon icon={faHouseUser} /> Home
+                        <NavLink className="nav-link" to="/" data-toggle="collapse" data-target="#navbarSupportedContent">
+                            <Icon icon={faHouseUser} /> {t('homePage:title')}
                         </NavLink>
                     </li>
                     <li className="nav-item active">
-                        <NavLink className="nav-link" to="/about">
-                            <Icon icon={faUsers} /> About us
+                        <NavLink className="nav-link" to={t('routes:about')} data-toggle="collapse" data-target="#navbarSupportedContent">
+                            <Icon icon={faUsers} /> {t('aboutPage:title')}
                         </NavLink>
                     </li>
                     <li className="nav-item active">
-                        <NavLink className="nav-link" to="/contact">
-                            <Icon icon={faEnvelope} /> Contact us
+                        <NavLink className="nav-link" to={t('routes:contact')} data-toggle="collapse" data-target="#navbarSupportedContent">
+                            <Icon icon={faEnvelope} /> {t('contactPage:title')}
                         </NavLink>
                     </li>
-                    <li className="nav-item active">
-                        <Dropdown className="btn-group">
-                            <LoginModal />
-                            <Dropdown.Toggle split variant="success" id="dropdown-split-basic" />
-                            <Dropdown.Menu>
-                                <Dropdown.Item href="/register">
-                                    <Icon icon={faUserPlus} /> Register
-                                </Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
+                    <li>
+                        <LanguageSelectorComponent />
                     </li>
+                    {!isLogin()
+                        ? <li className="nav-item active">
+                            <Dropdown className="btn-group">
+                                <LoginModal />
+                                <Dropdown.Toggle split variant="success" id="dropdown-split-basic" />
+                                <Dropdown.Menu>
+                                    <Dropdown.Item href={t('routes:register')}>
+                                        <Icon icon={faUserPlus} /> {t('registerPage:title')}
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </li>
+                        : <li className="nav-item active">
+                            <Dropdown className="btn-group">
+                                <Dropdown.Toggle split variant="success" id="dropdown-split-basic">{getUser().fullName} </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                    <Dropdown.Item href={t('routes:profile')}>
+                                        <Icon style={{ marginRight: '0.5em' }} icon={faUser} />
+                                        {t('profile:title')}
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </li>
+                    }
                 </ul>
             </div>
         </nav>

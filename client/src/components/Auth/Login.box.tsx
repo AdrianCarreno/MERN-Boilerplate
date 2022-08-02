@@ -1,10 +1,15 @@
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
-import { useState, ChangeEvent, FormEvent } from 'react'
-import { Button, Form } from 'react-bootstrap'
+import { ChangeEvent, FormEvent, useState } from 'react'
+import { Button, Form, InputGroup } from 'react-bootstrap'
+import { loginSet } from '../../Global'
 import './Auth.scss'
+import { t } from 'i18next'
 
 export default function LoginBox() {
     const [inputs, setInputs] = useState({})
+    const [showPassword, setShowPassword] = useState<boolean>(false)
     const [error, setError] = useState<boolean>(false)
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -17,7 +22,7 @@ export default function LoginBox() {
         axios
             .post('/api/auth/login', inputs)
             .then(res => {
-                console.log(res)
+                loginSet(JSON.stringify(res.data.data))
             })
             .catch(err => {
                 console.log(err)
@@ -28,33 +33,37 @@ export default function LoginBox() {
     return (
         <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
+                <Form.Label>{t('loginPage:email')}</Form.Label>
                 <Form.Control
                     name="email"
                     type="email"
-                    placeholder="Enter email"
+                    placeholder={t('loginPage:email')}
                     autoComplete="username"
                     isInvalid={error}
                     onChange={handleChange}
                 />
-                <Form.Control.Feedback type="invalid">Wrong credentials.</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">{t('loginPage:wrongCredentials')}</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
+            <Form.Label>{t('loginPage:password')}</Form.Label>
+            <InputGroup className="mb-3">
                 <Form.Control
                     name="password"
-                    type="password"
-                    placeholder="Password"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder={t('loginPage:password')}
                     autoComplete="current-password"
                     onChange={handleChange}
                 />
-            </Form.Group>
+                <Button variant="outline-secondary" onClick={() => setShowPassword(!showPassword)}>
+                    {showPassword ? <Icon icon={faEyeSlash} /> : <Icon icon={faEye} />}
+                </Button>
+            </InputGroup>
+
             <Button variant="primary" type="submit">
-                Submit
+                {t('loginPage:submit')}
             </Button>
             <p className="forgot-password text-right">
-                <a href="/forgot-password">Forgot password?</a>
+                <a href="/forgot-password">{t('loginPage:forgotPassword')}</a>
             </p>
         </Form>
     )

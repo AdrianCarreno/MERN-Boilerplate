@@ -1,7 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
 import { HttpException } from '@exceptions/HttpException'
 import { logger } from '@utils/logger'
-
+/**
+ * @param  {HttpException} error Exception to throw
+ * @param  {Request} req http request arguments
+ * @param  {Response} res http response arguments
+ * @param  {NextFunction} next next matching route
+ */
 const errorMiddleware = (error: HttpException, req: Request, res: Response, next: NextFunction) => {
     try {
         const status: number = error.status || 500

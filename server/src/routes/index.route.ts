@@ -1,19 +1,19 @@
 import { Router } from 'express'
-import IndexController from '@controllers/index.controller'
-import { Routes } from '@interfaces/routes.interface'
+import AuthRouter from './auth.route'
+import UsersRouter from './users.route'
+import GraphqlRouter from './graphql.route'
+import OrganizationsRouter from './organizations.route'
+import RolesRouter from './roles.route'
+/* import IndexController from '@controllers/index.controller' */
 
-class IndexRoute implements Routes {
-    public path = ''
-    public router = Router()
-    public indexController = new IndexController()
+const router = Router()
 
-    constructor() {
-        this.initializeRoutes()
-    }
+router.use('/api', AuthRouter)
+router.use('/api/users', UsersRouter)
+router.use('/api/graphql', GraphqlRouter)
+router.use('/api/organizations', OrganizationsRouter)
+router.use('/api/roles', RolesRouter)
+/* router.use('/api/pallets', PalletsRouter) */
+/* router.get(`/`, IndexController.index) */
 
-    private initializeRoutes() {
-        this.router.get(`${this.path}/`, this.indexController.index)
-    }
-}
-
-export default IndexRoute
+export default router

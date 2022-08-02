@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react'
 import { Alert, Button, Form } from 'react-bootstrap'
 import axios from 'axios'
+import { t } from 'i18next'
 
 export default function ResetPasswordComponent() {
     const search = useLocation().search
@@ -39,42 +40,42 @@ export default function ResetPasswordComponent() {
     }
 
     if (changed) {
-        return <Alert variant="success">Password changed!</Alert>
+        return <Alert variant="success">{t('resetPasswordPage:success')}</Alert>
     } else {
         return (
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
+                    <Form.Label>{t('resetPasswordPage:password')}</Form.Label>
                     <Form.Control
                         required
                         name="password"
                         type="password"
-                        placeholder="Password"
+                        placeholder={t('resetPasswordPage:password')}
                         autoComplete="current-password"
                         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                        title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                        title={t('resetPasswordPage:passwordPattern')}
                         isInvalid={passwordError !== undefined}
                         onChange={handleChange}
                     />
                     <Form.Control.Feedback type="invalid">{passwordError}</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPasswordConfirmation">
-                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Label>{t('resetPasswordPage:confirmPassword')}</Form.Label>
                     <Form.Control
                         required
                         name="confirmPassword"
                         type="password"
-                        placeholder="Re-enter password"
+                        placeholder={t('resetPasswordPage:confirmPassword')}
                         autoComplete="new-password"
                         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                        title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+                        title={t('resetPasswordPage:passwordPattern')}
                         isInvalid={passwordError !== undefined}
                         onChange={handleChange}
                     />
                     <Form.Control.Feedback type="invalid">{passwordError}</Form.Control.Feedback>
                 </Form.Group>
                 <Button variant="primary" type="submit" disabled={!passwordsMatch || isLoading}>
-                    {isLoading ? 'Loading...' : 'Submit'}
+                    {isLoading ? t('common:loading') : t('common:submit')}
                 </Button>
             </Form>
         )

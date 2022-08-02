@@ -16,18 +16,21 @@ const userSchema: Schema = new Schema(
             required: true,
             unique: true
         },
-        password: {
-            type: String,
-            required: false
-        },
         emailVerifiedAt: {
             type: Date,
             default: null,
             required: false
-        }
+        },
+        roles: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Role'
+            }
+        ]
     },
     {
         timestamps: true,
+        id: false,
         toObject: {
             virtuals: true
         },
@@ -46,6 +49,12 @@ userSchema.virtual('fullName').get(function () {
 
 userSchema.virtual('name').get(function () {
     return this.fullName
+})
+
+userSchema.virtual('authenticationMethods', {
+    ref: 'AuthenticationMethod',
+    localField: '_id',
+    foreignField: 'userId'
 })
 
 const userModel = model<User & Document>('User', userSchema)

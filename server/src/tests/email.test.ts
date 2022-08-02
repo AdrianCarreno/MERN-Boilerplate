@@ -1,10 +1,6 @@
 import { sendEmail, sendHTMLEmail } from '@/services/email.service'
 import { frontendAsset } from '@/utils/util'
 
-beforeAll(async () => {
-    jest.setTimeout(10000)
-})
-
 afterAll(async () => {
     await new Promise<void>(resolve => setTimeout(() => resolve(), 500))
 })
@@ -12,6 +8,7 @@ afterAll(async () => {
 describe('Testing email', () => {
     describe('Plain text with no attachments', () => {
         it('should send an email', async () => {
+            jest.setTimeout(10000)
             let res
             try {
                 res = await sendEmail('test@yopmail.com', 'Test subject', 'Test text')
@@ -23,6 +20,7 @@ describe('Testing email', () => {
 
     describe('Plain text with photo attachment', () => {
         it('should send an email', async () => {
+            jest.setTimeout(10000)
             let res
             try {
                 res = await sendEmail('test@yopmail.com', 'Test subject', 'Test text', {
@@ -36,6 +34,7 @@ describe('Testing email', () => {
 
     describe('HTML with no attachments', () => {
         it('should send an email', async () => {
+            jest.setTimeout(10000)
             let res
             try {
                 res = await sendHTMLEmail(
@@ -51,6 +50,7 @@ describe('Testing email', () => {
 
     describe('HTML with photo attachment', () => {
         it('should send an email', async () => {
+            jest.setTimeout(10000)
             let res
             try {
                 res = await sendHTMLEmail(

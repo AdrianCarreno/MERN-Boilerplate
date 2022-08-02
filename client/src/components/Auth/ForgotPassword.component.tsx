@@ -1,6 +1,7 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
 import { Alert, Button, Form } from 'react-bootstrap'
 import axios from 'axios'
+import { t } from 'i18next'
 
 export default function ForgotPasswordComponent() {
     const [email, setEmail] = useState<string>('')
@@ -29,12 +30,12 @@ export default function ForgotPasswordComponent() {
     }
 
     if (sent) {
-        return <Alert variant="success">Email sent!</Alert>
+        return <Alert variant="success">{t('forgotPasswordPage:emailSent')}</Alert>
     } else {
         return (
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
+                    <Form.Label>{t('forgotPasswordPage:email')}</Form.Label>
                     <Form.Control
                         required
                         name="email"
@@ -47,7 +48,7 @@ export default function ForgotPasswordComponent() {
                     <Form.Control.Feedback type="invalid">{emailError}</Form.Control.Feedback>
                 </Form.Group>
                 <Button variant="primary" type="submit" disabled={isLoading}>
-                    {isLoading ? 'Loading...' : 'Submit'}
+                    {isLoading ? t('common:loading') : t('common:submit')}
                 </Button>
             </Form>
         )

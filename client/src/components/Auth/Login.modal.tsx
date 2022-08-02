@@ -3,6 +3,7 @@ import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
 import { LoginBox } from './index'
+import { t } from 'i18next'
 
 export default function LoginModal() {
     const [show, setShow] = useState(false)
@@ -12,12 +13,12 @@ export default function LoginModal() {
     return (
         <>
             <Button variant="success" size="sm" onClick={handleShow}>
-                <Icon icon={faSignInAlt} /> Login
+                <Icon icon={faSignInAlt} /> {t('loginPage:title')}
             </Button>
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Login</Modal.Title>
+                    <Modal.Title>{t('loginPage:title')}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <LoginBox />

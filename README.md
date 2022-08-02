@@ -7,6 +7,8 @@ This boilerplate was made as a template to a developer wanting to build an app u
 1. [What is MERN?](#what-is-mern)
 1. [Installation](#installation)
 1. [Usage](#usage)
+1. [Testing](#testing)
+1. [Translation](#translation)
 1. [License](#license)
 1. [Contributing](#contributing)
 1. [Questions](#questions)
@@ -62,6 +64,31 @@ To start the backend server, and a development frontend server. Upon starting th
 
 The property `lastName` is optional. Upon signing up, the application will return a cookie with the token of the user, so every request will be authenticated.
 
+Some errors you could experience and possible solutions:
+
+1. While running the server, `[nodemon] app crashed - waiting for file changes before starting...`
+
+Solution:
+
+```bash
+
+npm install -g ts-node
+```
+
+It will install the dependencies of ts-node to run the app.
+
+### Example .env
+
+In the enviroment file in the server folder add the following parameters:
+
+````text
+FIRSTNAME="Super"
+LASTNAME="Admin"
+EMAIL="superAdmin@email.com"
+PASSWORD="Yourpassword1"
+ROLES=[]
+````
+
 ## Publishing
 
 There are many ways to deploy a node.js server, so it will no be detailed in this guide. Nonetheless, before publishing it would be a good practice to build the frontend code with:
@@ -70,6 +97,23 @@ There are many ways to deploy a node.js server, so it will no be detailed in thi
 cd ./client
 npm run build
 ```
+
+[Go up](#table-of-contents)
+
+# Testing
+
+Before pushing any code to the repository, it is a good practice to run the tests. To run the tests, run the following command (it should take a while to complete the tests):
+
+```
+cd ./server
+npm test
+```
+
+If the `email` suite fails, it's probably because you don't have the proper credentials. Please set the proper credentials.
+
+# Translation
+
+Front end translation **should not be done using natural language**, because the library utilized is _key based_ and has reserved characters (like `:` and `.`). Back end translation can be done using natural language, but it is not recommended, as it makes the keys too long.
 
 [Go up](#table-of-contents)
 

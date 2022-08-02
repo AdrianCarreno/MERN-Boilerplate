@@ -1,9 +1,15 @@
 import 'dotenv/config'
-import App from '@/app'
-import AuthRoute from '@routes/auth.route'
-import IndexRoute from '@routes/index.route'
-import UsersRoute from '@routes/users.route'
+import { App } from './app'
+/* import routes from '@routes/index'
+import AccessControlServices from '@services/accessControl.service' */
 
-const app = new App([new IndexRoute(), new UsersRoute(), new AuthRoute()])
+/* const app = new App(routes) */
 
-app.listen()
+const startServer = async () => {
+    App()
+    /* await AccessControlServices.createSuperAdmin()
+    await AccessControlServices.initAccessControl()
+    app.listen() */
+}
+
+startServer()

@@ -1,6 +1,5 @@
 import smtp from '@/configs/smtp'
 import nodemailer from 'nodemailer'
-import { __ } from 'i18n'
 import { isEmpty } from '@/utils/util'
 import Mail from 'nodemailer/lib/mailer'
 
